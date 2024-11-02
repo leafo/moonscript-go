@@ -48,8 +48,22 @@ ExpressionLine <- value:Expression Stop {
 
 Expression <- Primitive / Number / Ref / String
 
-AssignmentLine <- names:NameList White "=" White expr:Expression Stop {
-  return AssignmentNode{names.([]any), expr}, nil
+ExpressionList <- head:Expression tail:ExpressionListTail* {
+  exprs := make([]any, 0, 1)
+  exprs = append(exprs, head)
+  for _, t := range tail.([]any) {
+    exprs = append(exprs, t)
+  }
+
+  return exprs, nil
+}
+
+ExpressionListTail <- Space "," White expr:Expression {
+  return expr, nil
+}
+
+AssignmentLine <- names:NameList White "=" White exprs:ExpressionList Stop {
+  return AssignmentNode{names.([]any), exprs.([]any)}, nil
 }
 
 Comment <- "--" body:CommentBody {

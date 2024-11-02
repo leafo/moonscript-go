@@ -16,7 +16,7 @@ type PrimitiveNode struct {
 
 type AssignmentNode struct {
 	Names []any
-	Expr  any
+	Exprs []any
 }
 
 type StringNode struct {
