@@ -1,0 +1,124 @@
+{
+package main
+
+}
+
+Input <- lines:Line* EOF {
+  outLines := make([]Node, 0, len(lines.([]interface{})))
+
+  for _, line := range lines.([]interface{}) {
+    if line == nil {
+      continue
+    }
+
+    // switch line := line.(type) {
+    // case CommentNode:
+    //   fmt.Println("This is a comment:", line.Text)
+    // case NumberNode:
+    //   fmt.Println("This is a number:", line.Text)
+    // case RefNode:
+    //   fmt.Println("This is a reference:", line.Name)
+    // default:
+    //   fmt.Printf("Unknown node type: %T: %v\n", line, line)
+    //   continue
+    // }
+
+    outLines = append(outLines, line)
+  }
+
+  return Lines{outLines}, nil
+}
+
+
+EOF <- !.
+Space <- [ \t]*
+Break <- "\r"? "\n"
+Stop <- Break / EOF
+
+Line <- EmptyLine / CommentLine / ExpressionLine
+
+EmptyLine <- (Space Break / [ \t]+ Stop) {
+  return nil, nil
+}
+
+ExpressionLine <- value:Expression Stop {
+  return value, nil
+}
+
+Expression <- Number / Ref / String
+
+Comment <- "--" body:CommentBody {
+  return CommentNode{body.(string)}, nil
+}
+
+// a comment that takes up an entire line
+CommentLine <- Space value:Comment Stop {
+  return value, nil
+}
+
+CommentBody <- (!Break .)* {
+  return string(c.text), nil
+}
+
+Name <- [a-zA-Z_] [a-zA-Z0-9_]* {
+  return string(c.text), nil
+}
+
+Ref <- name:Name {
+  return RefNode{name.(string)}, nil
+}
+
+// TODO: handle decimals and exponents (non integer types
+Number <- [0-9]+ {
+  return NumberNode{Integer, string(c.text)}, nil
+}
+
+String <- DoubleQuotedString / SingleQuotedString / LuaString
+
+DoubleQuotedString <- '"' parts:(Interpolation / DoubleStringChars)* '"' {
+  return StringNode{`"`, parts}, nil
+}
+
+DoubleStringChars <- ([\\] '"' / !["] !"#{" .)+ {
+  return string(c.text), nil
+}
+
+Interpolation <- "#{" expr:Expression "}" {
+  return InterpolationNode{expr}, nil
+}
+
+SingleQuotedString <- "'" parts:(SingleStringChars)* "'" {
+  return StringNode{`'`, parts}, nil
+}
+
+SingleStringChars <- ([\\] "'" / !"'" .)+ {
+  return string(c.text), nil
+}
+
+LuaString <- LuaStringOpen parts:(LuaStringChars)* LuaStringClose {
+  return StringNode{"XXX", parts}, nil
+}
+
+LuaStringChars <- (!LuaStringClose .)+ {
+  return string(c.text), nil
+}
+
+LuaStringDelimiterCount <- "="* {
+  return len(c.text), nil
+}
+
+LuaStringOpen <- "[" count:LuaStringDelimiterCount "[" #{
+  c.state["lua_string"] = count
+  return nil
+}
+
+
+LuaStringClose <- "]" count:LuaStringDelimiterCount "]" &{
+  if c.state["lua_string"].(int) == count.(int) {
+    return true, nil
+  }
+
+  return false, nil
+}
+
+
