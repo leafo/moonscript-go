@@ -2,23 +2,30 @@ package main
 
 import "encoding/json"
 
-type Node interface{}
-
 type Lines struct {
-	Nodes []Node
+	Nodes []any
 }
 
 type CommentNode struct {
 	Text string
 }
 
+type PrimitiveNode struct {
+	Value string
+}
+
+type AssignmentNode struct {
+	Names []any
+	Expr  any
+}
+
 type StringNode struct {
 	Delimiter   string
-	StringParts interface{}
+	StringParts []any // string literal or interpolation
 }
 
 type InterpolationNode struct {
-	Expression interface{}
+	Expression any
 }
 
 // a parsed number

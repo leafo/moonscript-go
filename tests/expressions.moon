@@ -29,3 +29,7 @@ world'
 
 [==[lua string with fake ]]closing]==]
 [==[[[w]]]==]
+
+true
+false
+nil

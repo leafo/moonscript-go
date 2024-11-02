@@ -4,9 +4,9 @@ package main
 }
 
 Input <- lines:Line* EOF {
-  outLines := make([]Node, 0, len(lines.([]interface{})))
+  outLines := make([]any, 0, len(lines.([]any)))
 
-  for _, line := range lines.([]interface{}) {
+  for _, line := range lines.([]any) {
     if line == nil {
       continue
     }
@@ -31,11 +31,12 @@ Input <- lines:Line* EOF {
 
 
 EOF <- !.
+White <- [ \t\r\n]* // includes newlines
 Space <- [ \t]*
 Break <- "\r"? "\n"
 Stop <- Break / EOF
 
-Line <- EmptyLine / CommentLine / ExpressionLine
+Line <- EmptyLine / CommentLine / AssignmentLine / ExpressionLine
 
 EmptyLine <- (Space Break / [ \t]+ Stop) {
   return nil, nil
@@ -45,7 +46,11 @@ ExpressionLine <- value:Expression Stop {
   return value, nil
 }
 
-Expression <- Number / Ref / String
+Expression <- Primitive / Number / Ref / String
+
+AssignmentLine <- names:NameList White "=" White expr:Expression Stop {
+  return AssignmentNode{names.([]any), expr}, nil
+}
 
 Comment <- "--" body:CommentBody {
   return CommentNode{body.(string)}, nil
@@ -64,6 +69,20 @@ Name <- [a-zA-Z_] [a-zA-Z0-9_]* {
   return string(c.text), nil
 }
 
+NameListTail <- Space "," White name:Name {
+  return name, nil
+}
+
+NameList <- head:Name tail:NameListTail* {
+  names := make([]any, 0, 1)
+  names = append(names, head)
+  for _, t := range tail.([]any) {
+    names = append(names, t)
+  }
+
+  return names, nil
+}
+
 Ref <- name:Name {
   return RefNode{name.(string)}, nil
 }
@@ -76,7 +95,7 @@ Number <- [0-9]+ {
 String <- DoubleQuotedString / SingleQuotedString / LuaString
 
 DoubleQuotedString <- '"' parts:(Interpolation / DoubleStringChars)* '"' {
-  return StringNode{`"`, parts}, nil
+  return StringNode{`"`, parts.([]any)}, nil
 }
 
 DoubleStringChars <- ([\\] '"' / !["] !"#{" .)+ {
@@ -88,7 +107,7 @@ Interpolation <- "#{" expr:Expression "}" {
 }
 
 SingleQuotedString <- "'" parts:(SingleStringChars)* "'" {
-  return StringNode{`'`, parts}, nil
+  return StringNode{`'`, parts.([]any)}, nil
 }
 
 SingleStringChars <- ([\\] "'" / !"'" .)+ {
@@ -96,7 +115,7 @@ SingleStringChars <- ([\\] "'" / !"'" .)+ {
 }
 
 LuaString <- LuaStringOpen parts:(LuaStringChars)* LuaStringClose {
-  return StringNode{"XXX", parts}, nil
+  return StringNode{"XXX", parts.([]any)}, nil
 }
 
 LuaStringChars <- (!LuaStringClose .)+ {
@@ -112,13 +131,16 @@ LuaStringOpen <- "[" count:LuaStringDelimiterCount "[" #{
   return nil
 }
 
-
 LuaStringClose <- "]" count:LuaStringDelimiterCount "]" &{
   if c.state["lua_string"].(int) == count.(int) {
     return true, nil
   }
 
   return false, nil
+}
+
+Primitive <- ("true" / "false" / "nil") {
+  return PrimitiveNode{string(c.text)}, nil
 }
 
 
