@@ -4,6 +4,8 @@
       "Condition": {
         "Ref": "something"
       },
+      "ElseIfs": [],
+      "ElseLines": null,
       "Lines": [
         {
           "Ops": [
@@ -48,6 +50,8 @@
       "Condition": {
         "Primitive": "true"
       },
+      "ElseIfs": [],
+      "ElseLines": null,
       "Lines": [
         {
           "Exprs": [
@@ -90,6 +94,8 @@
       "Condition": {
         "Ref": "one"
       },
+      "ElseIfs": [],
+      "ElseLines": null,
       "Lines": [
         {
           "Comment": " what is comment here"
@@ -131,6 +137,8 @@
           "Condition": {
             "Ref": "two"
           },
+          "ElseIfs": [],
+          "ElseLines": null,
           "Lines": [
             {
               "Ref": "second"
@@ -152,9 +160,81 @@
       "Condition": {
         "Ref": "fart"
       },
+      "ElseIfs": [],
+      "ElseLines": null,
       "Lines": [
         {
           "Ref": "zone"
+        }
+      ]
+    },
+    {
+      "Condition": {
+        "Ref": "this"
+      },
+      "ElseIfs": [],
+      "ElseLines": null,
+      "Lines": [
+        {
+          "Ref": "that"
+        }
+      ]
+    },
+    {
+      "Condition": {
+        "Ref": "something"
+      },
+      "ElseIfs": [],
+      "ElseLines": [
+        {
+          "Delimiter": "\"",
+          "StringParts": [
+            "bad"
+          ]
+        }
+      ],
+      "Lines": [
+        {
+          "Delimiter": "\"",
+          "StringParts": [
+            "good"
+          ]
+        }
+      ]
+    },
+    {
+      "Condition": {
+        "Primitive": "true"
+      },
+      "ElseIfs": [
+        {
+          "Condition": {
+            "Primitive": "false"
+          },
+          "Lines": [
+            {
+              "Delimiter": "\"",
+              "StringParts": [
+                "wonker"
+              ]
+            }
+          ]
+        }
+      ],
+      "ElseLines": [
+        {
+          "Delimiter": "\"",
+          "StringParts": [
+            "donker"
+          ]
+        }
+      ],
+      "Lines": [
+        {
+          "Delimiter": "\"",
+          "StringParts": [
+            "lonker"
+          ]
         }
       ]
     }

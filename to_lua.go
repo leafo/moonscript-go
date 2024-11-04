@@ -324,6 +324,59 @@ func (n IfStatementNode) ToLua(state *LuaRenderState) (string, error) {
 
 	state.Indent -= 1
 
+	for _, elseif := range n.ElseIfs {
+		elseifConditionStr, err := elseif.Condition.(Node).ToLua(state)
+		if err != nil {
+			return "", err
+		}
+
+		buf.WriteString(state.WithIndent("elseif "))
+		buf.WriteString(elseifConditionStr)
+		buf.WriteString(" then\n")
+
+		state.Indent += 1
+
+		for _, line := range elseif.Lines {
+			lineNode, ok := line.(Node)
+			if !ok {
+				return "", fmt.Errorf("ElseIfStatementNode: unknown line type: %T", line)
+			}
+
+			lineStr, err := lineNode.ToLua(state)
+			if err != nil {
+				return "", err
+			}
+
+			buf.WriteString(state.WithIndent(lineStr))
+			buf.WriteString("\n")
+		}
+
+		state.Indent -= 1
+	}
+
+	if len(n.ElseLines) > 0 {
+		buf.WriteString(state.WithIndent("else\n"))
+
+		state.Indent += 1
+
+		for _, line := range n.ElseLines {
+			lineNode, ok := line.(Node)
+			if !ok {
+				return "", fmt.Errorf("IfStatementNode: unknown else line type: %T", line)
+			}
+
+			lineStr, err := lineNode.ToLua(state)
+			if err != nil {
+				return "", err
+			}
+
+			buf.WriteString(state.WithIndent(lineStr))
+			buf.WriteString("\n")
+		}
+
+		state.Indent -= 1
+	}
+
 	buf.WriteString(state.WithIndent("end"))
 	return buf.String(), nil
 }

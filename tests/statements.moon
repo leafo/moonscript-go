@@ -28,3 +28,18 @@ final
 if fart
 
   zone
+
+if this then that
+
+if something
+  "good"
+else
+  "bad"
+
+
+if true
+  "lonker"
+elseif false
+  "wonker"
+else
+  "donker"

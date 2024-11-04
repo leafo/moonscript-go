@@ -117,4 +117,11 @@ type ChainIndexNode struct {
 type IfStatementNode struct {
 	Condition any
 	Lines     []any
+	ElseIfs   []ElseIfStatementNode
+	ElseLines []any
+}
+
+type ElseIfStatementNode struct {
+	Condition any
+	Lines     []any
 }

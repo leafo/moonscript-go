@@ -1,6 +1,23 @@
 {
 package main
+
+func toSlice[T any](v any) []T {
+  if v == nil {
+    return nil
+  }
+
+  originalSlice := v.([]any)
+  newSlice := make([]T, len(originalSlice))
+
+  for i, val := range originalSlice {
+    newSlice[i] = val.(T)
+  }
+
+  return newSlice
 }
+
+}
+
 
 Input <- lines:Line* EOF {
   outLines := make([]any, 0, len(lines.([]any)))
@@ -28,6 +45,8 @@ AlphaNum <- [a-zA-Z0-9_]
 
 // A Line mathes the end of the line and advances to the next line
 Line <- EmptyLine / CommentLine / AssignmentLine / IfStatement / ExpressionLine
+
+Keyword <- "if" / "then" / "elseif" / "else"
 
 EmptyLine <- (Space Break / [ \t]+ Stop) {
   return nil, nil
@@ -118,7 +137,7 @@ NameList <- head:Name tail:NameListTail* {
   return names, nil
 }
 
-Ref <- name:Name {
+Ref <- !Keyword name:Name {
   return RefNode{name.(string)}, nil
 }
 
@@ -293,8 +312,32 @@ IndentLines <- EmptyLine* head:InitialIndentLine tail:IndentLine* PopIndent {
 }
 
 
-IfStatement <- "if" Space condition:Expression SpaceStop lines:IndentLines {
-  return IfStatementNode{condition, lines.([]any)}, nil
+IfStatement <- "if" Space condition:Expression Space lines:(ConditionLine / ConditionBlock) else_if_blocks:ElseIfBlock* else_lines:(ElseBlock / ElseLine)? {
+  return IfStatementNode{
+    condition,
+    lines.([]any),
+    toSlice[ElseIfStatementNode](else_if_blocks),
+    toSlice[any](else_lines),
+  }, nil
 }
 
+ConditionLine <- "then" Space line:Line {
+  return []any{line}, nil
+}
+
+ConditionBlock <- Break lines:IndentLines {
+  return lines, nil
+}
+
+ElseIfBlock <- "elseif" Space condition:Expression SpaceStop lines:IndentLines {
+  return ElseIfStatementNode{condition, lines.([]any)}, nil
+}
+
+ElseBlock <- "else" SpaceStop lines:IndentLines {
+  return lines, nil
+}
+
+ElseLine <- "else" Space line:Line {
+  return []any{line}, nil
+}
 
