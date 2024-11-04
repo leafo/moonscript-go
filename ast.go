@@ -89,6 +89,10 @@ type RefNode struct {
 	Ref string
 }
 
+type SelfRefNode struct {
+	Ref string
+}
+
 type ParensNode struct {
 	Expression any
 }

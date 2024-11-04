@@ -117,6 +117,10 @@ func (n RefNode) ToLua(state *LuaRenderState) (string, error) {
 	return n.Ref, nil
 }
 
+func (n SelfRefNode) ToLua(state *LuaRenderState) (string, error) {
+	return "self." + n.Ref, nil
+}
+
 func (n ExpressionNode) ToLua(state *LuaRenderState) (string, error) {
 	var buf strings.Builder
 

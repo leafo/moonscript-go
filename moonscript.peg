@@ -139,6 +139,14 @@ NameList <- head:Name tail:NameListTail* {
 
 Ref <- !Keyword name:Name {
   return RefNode{name.(string)}, nil
+} / SelfRef / Self
+
+SelfRef <- "@" name:Name {
+  return SelfRefNode{name.(string)}, nil
+}
+
+Self <- "@" {
+  return RefNode{"self"}, nil
 }
 
 // TODO: handle decimals and exponents (non integer types

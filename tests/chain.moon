@@ -19,3 +19,10 @@ one("day").three[9] four, "baby", go false
 thing\world "hello"
 
 hello.world!
+
+@hello.world
+
+@ thing
+
+-- this should probably be handled via tranformer
+@zonkers "yup"
