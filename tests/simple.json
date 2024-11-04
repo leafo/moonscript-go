@@ -230,6 +230,48 @@
       "Names": [
         "value"
       ]
+    },
+    {
+      "Exprs": [
+        {
+          "Tuples": null
+        }
+      ],
+      "Names": [
+        "t"
+      ]
+    },
+    {
+      "Exprs": [
+        {
+          "Tuples": [
+            {
+              "Key": null,
+              "Value": {
+                "Text": "1",
+                "Type": "Integer"
+              }
+            },
+            {
+              "Key": null,
+              "Value": {
+                "Text": "2",
+                "Type": "Integer"
+              }
+            },
+            {
+              "Key": null,
+              "Value": {
+                "Text": "3",
+                "Type": "Integer"
+              }
+            }
+          ]
+        }
+      ],
+      "Names": [
+        "t"
+      ]
     }
   ]
 }

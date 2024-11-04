@@ -113,3 +113,8 @@ type ChainDotNode struct {
 type ChainIndexNode struct {
 	Index any
 }
+
+type IfStatementNode struct {
+	Condition any
+	Lines     []any
+}

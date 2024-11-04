@@ -1,0 +1,120 @@
+{
+  "Lines": [
+    {
+      "Condition": {
+        "Ref": "something"
+      },
+      "Lines": [
+        {
+          "Ops": [
+            {
+              "Arguments": [
+                {
+                  "Delimiter": "\"",
+                  "StringParts": [
+                    "Hello world!"
+                  ]
+                }
+              ]
+            }
+          ],
+          "Target": {
+            "Ref": "print"
+          }
+        }
+      ]
+    },
+    {
+      "Ops": [
+        {
+          "Arguments": [
+            {
+              "Delimiter": "\"",
+              "StringParts": [
+                "End"
+              ]
+            }
+          ]
+        }
+      ],
+      "Target": {
+        "Ref": "print"
+      }
+    },
+    {
+      "Condition": {
+        "Primitive": "true"
+      },
+      "Lines": [
+        {
+          "Exprs": [
+            {
+              "Text": "2",
+              "Type": "Integer"
+            },
+            {
+              "Text": "3",
+              "Type": "Integer"
+            }
+          ],
+          "Names": [
+            "value"
+          ]
+        },
+        {
+          "Exprs": [
+            {
+              "Tuples": [
+                {
+                  "Key": null,
+                  "Value": {
+                    "Ref": "value"
+                  }
+                }
+              ]
+            }
+          ],
+          "Names": [
+            "list"
+          ]
+        }
+      ]
+    },
+    {
+      "Condition": {
+        "Ref": "one"
+      },
+      "Lines": [
+        {
+          "Ref": "first"
+        },
+        {
+          "Condition": {
+            "Ref": "two"
+          },
+          "Lines": [
+            {
+              "Ref": "second"
+            }
+          ]
+        },
+        {
+          "Ref": "third"
+        }
+      ]
+    },
+    {
+      "Ref": "final"
+    },
+    {
+      "Condition": {
+        "Ref": "fart"
+      },
+      "Lines": [
+        {
+          "Ref": "zone"
+        }
+      ]
+    }
+  ]
+}

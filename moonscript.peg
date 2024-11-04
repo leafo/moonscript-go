@@ -1,6 +1,5 @@
 {
 package main
-
 }
 
 Input <- lines:Line* EOF {
@@ -24,9 +23,11 @@ Space <- [ \t]*
 SomeSpace <- [ \t]+
 Break <- "\r"? "\n"
 Stop <- Break / EOF
+SpaceStop <- Space Stop
 AlphaNum <- [a-zA-Z0-9_]
 
-Line <- EmptyLine / CommentLine / AssignmentLine / ExpressionLine
+// A Line mathes the end of the line and advances to the next line
+Line <- EmptyLine / CommentLine / AssignmentLine / IfStatement / ExpressionLine
 
 EmptyLine <- (Space Break / [ \t]+ Stop) {
   return nil, nil
@@ -239,6 +240,61 @@ ChainDot <- "." White name:Name {
 
 ChainIndex <- "[" White exp:Expression White "]" {
   return ChainIndexNode{exp}, nil
+}
+
+Indent <- [ \t]* {
+  str := string(c.text)
+  sum := 1 * strings.Count(str, " ") + 4 * strings.Count(str, "\t")
+  return sum, nil
+}
+
+// measure the indent and only pass if it matches the current indent
+MatchIndent <- indent:Indent &{
+  if currentIndent(c.state) == indent.(int) {
+    return true, nil
+  }
+  return false, nil
+}
+
+
+StartIndent <- indent:Indent &{
+  if currentIndent(c.state) < indent.(int) {
+    return true, nil
+  }
+
+  return false, nil
+} #{
+  pushIndent(c.state, indent.(int))
+  return nil
+}
+
+
+PopIndent <- #{
+  popIndent(c.state)
+  return nil
+}
+
+InitialIndentLine <- StartIndent line:Line {
+  return line, nil
+}
+
+IndentLine <- EmptyLine* MatchIndent line:Line {
+  return line, nil
+}
+
+IndentLines <- EmptyLine* head:InitialIndentLine tail:IndentLine* PopIndent {
+  lines := make([]any, 0, 1)
+  lines = append(lines, head)
+  for _, t := range tail.([]any) {
+    lines = append(lines, t)
+  }
+
+  return lines, nil
+}
+
+
+IfStatement <- "if" Space condition:Expression SpaceStop lines:IndentLines {
+  return IfStatementNode{condition, lines.([]any)}, nil
 }
 
 
