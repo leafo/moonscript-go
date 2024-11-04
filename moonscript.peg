@@ -53,7 +53,11 @@ OperatorExpression <- Space operator:Operator White exp:ExpressionValue {
   return OperatorExpressionNode{operator.(string), exp}, nil
 }
 
-ExpressionValue <- Primitive / Number / Ref / String / Table
+ExpressionValue <- Primitive / Number / Ref / String / Table / Parens
+
+Parens <- "(" exp:Expression ")" {
+  return ParensNode{exp}, nil
+}
 
 ExpressionList <- head:Expression tail:ExpressionListTail* {
   exprs := make([]any, 0, 1)
@@ -209,8 +213,4 @@ TableTupleKeyExpression <- "[" White exp:Expression White "]" {
 TableElementTail <- Space ("," / Break ) White el:TableElement {
   return el, nil
 }
-
-
-
-
 

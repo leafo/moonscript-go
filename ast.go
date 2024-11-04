@@ -80,5 +80,9 @@ type NumberNode struct {
 
 // reference to a variable
 type RefNode struct {
-	Name string
+	Ref string
+}
+
+type ParensNode struct {
+	Expression any
 }
