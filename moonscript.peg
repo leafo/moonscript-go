@@ -46,7 +46,26 @@ ExpressionLine <- value:Expression Stop {
   return value, nil
 }
 
-Expression <- Primitive / Number / Ref / String
+Expression <- head:ExpressionValue rest:OperatorExpression* {
+  r := make([]OperatorExpressionNode, 0, len(rest.([]any)))
+
+  for _, exp := range rest.([]any) {
+    r = append(r, exp.(OperatorExpressionNode))
+  }
+
+  // remove unec
+  if len(r) == 0 {
+    return head, nil
+  }
+
+  return ExpressionNode{head, r}, nil
+}
+
+OperatorExpression <- Space operator:Operator White exp:ExpressionValue {
+  return OperatorExpressionNode{operator.(string), exp}, nil
+}
+
+ExpressionValue <- Primitive / Number / Ref / String
 
 ExpressionList <- head:Expression tail:ExpressionListTail* {
   exprs := make([]any, 0, 1)
@@ -60,6 +79,10 @@ ExpressionList <- head:Expression tail:ExpressionListTail* {
 
 ExpressionListTail <- Space "," White expr:Expression {
   return expr, nil
+}
+
+Operator <- [-+*/^%<>] {
+  return string(c.text), nil
 }
 
 AssignmentLine <- names:NameList White "=" White exprs:ExpressionList Stop {

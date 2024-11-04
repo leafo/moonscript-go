@@ -19,6 +19,16 @@ type AssignmentNode struct {
 	Exprs []any
 }
 
+type ExpressionNode struct {
+	Head any
+	Rest []OperatorExpressionNode
+}
+
+type OperatorExpressionNode struct {
+	Operator string
+	Value    any
+}
+
 type StringNode struct {
 	Delimiter   string
 	StringParts []any // string literal or interpolation
