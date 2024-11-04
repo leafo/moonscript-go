@@ -109,6 +109,10 @@ type ChainDotNode struct {
 	Field string
 }
 
+type ChainMethodNode struct {
+	Field string
+}
+
 // indexes field by expression with brackets
 type ChainIndexNode struct {
 	Index any

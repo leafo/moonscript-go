@@ -242,11 +242,15 @@ Chain <- target:(Ref / Parens) tail:ChainOperation+ {
   return ChainNode{target, tail.([]any)}, nil
 }
 
-ChainOperation <- ChainCall / ChainDot / ChainCallParens / ChainIndex
+ChainOperation <- ChainBang / ChainCall / ChainDot / ChainMethod / ChainCallParens / ChainIndex
 
 // whitespace function call
 ChainCall <- SomeSpace args:ExpressionList {
   return ChainCallNode{args.([]any)}, nil
+}
+
+ChainBang <- "!" {
+  return ChainCallNode{nil}, nil
 }
 
 ChainCallParens <- "(" White args:ExpressionList White ")" {
@@ -255,6 +259,10 @@ ChainCallParens <- "(" White args:ExpressionList White ")" {
 
 ChainDot <- "." White name:Name {
   return ChainDotNode{name.(string)}, nil
+}
+
+ChainMethod <- `\` White name:Name {
+  return ChainMethodNode{name.(string)}, nil
 }
 
 ChainIndex <- "[" White exp:Expression White "]" {

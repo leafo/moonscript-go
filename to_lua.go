@@ -220,6 +220,9 @@ func (n ChainDotNode) ToLua(state *LuaRenderState) (string, error) {
 	return "." + n.Field, nil
 }
 
+func (n ChainMethodNode) ToLua(state *LuaRenderState) (string, error) {
+	return ":" + n.Field, nil
+}
 func (n ChainIndexNode) ToLua(state *LuaRenderState) (string, error) {
 	indexNode, ok := n.Index.(Node)
 	if !ok {

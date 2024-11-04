@@ -15,3 +15,7 @@ one[two].three(four) five
 one("day").three[9] four, "baby", go false
 
 ("my string").format "%d"
+
+thing\world "hello"
+
+hello.world!

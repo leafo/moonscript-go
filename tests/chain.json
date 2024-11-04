@@ -259,6 +259,39 @@
           ]
         }
       }
+    },
+    {
+      "Ops": [
+        {
+          "Field": "world"
+        },
+        {
+          "Arguments": [
+            {
+              "Delimiter": "\"",
+              "StringParts": [
+                "hello"
+              ]
+            }
+          ]
+        }
+      ],
+      "Target": {
+        "Ref": "thing"
+      }
+    },
+    {
+      "Ops": [
+        {
+          "Field": "world"
+        },
+        {
+          "Arguments": null
+        }
+      ],
+      "Target": {
+        "Ref": "hello"
+      }
     }
   ]
 }

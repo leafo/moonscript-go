@@ -13,8 +13,8 @@ moonscript-go: *.go
 parser.go: moonscript.peg
 	@pigeon -o parser.go moonscript.peg
 
-test-%: parser.go
-	@go run . -json tests/$*.moon
+test-%: moonscript-go
+	@./moonscript-go -json tests/$*.moon
 
 tests/%.json: moonscript-go tests/%.moon
 	./moonscript-go -json tests/$*.moon | jq -S > tests/$*.json
