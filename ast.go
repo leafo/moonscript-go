@@ -86,3 +86,20 @@ type RefNode struct {
 type ParensNode struct {
 	Expression any
 }
+
+type ChainNode struct {
+	Target any
+	Ops    []any
+}
+
+type ChainCallNode struct {
+	Arguments []any
+}
+
+type ChainDotNode struct {
+	Field string
+}
+
+type ChainIndexNode struct {
+	Index any
+}

@@ -21,6 +21,7 @@ Input <- lines:Line* EOF {
 EOF <- !.
 White <- [ \t\r\n]* // includes newlines
 Space <- [ \t]*
+SomeSpace <- [ \t]+
 Break <- "\r"? "\n"
 Stop <- Break / EOF
 
@@ -53,7 +54,7 @@ OperatorExpression <- Space operator:Operator White exp:ExpressionValue {
   return OperatorExpressionNode{operator.(string), exp}, nil
 }
 
-ExpressionValue <- Primitive / Number / Ref / String / Table / Parens
+ExpressionValue <- Primitive / Number / Chain / Ref / String / Table / Parens
 
 Parens <- "(" White exp:Expression White ")" {
   return ParensNode{exp}, nil
@@ -213,4 +214,28 @@ TableTupleKeyExpression <- "[" White exp:Expression White "]" {
 TableElementTail <- Space ("," / Break ) White el:TableElement {
   return el, nil
 }
+
+Chain <- target:(Ref / Parens) tail:ChainOperation+ {
+  return ChainNode{target, tail.([]any)}, nil
+}
+
+ChainOperation <- ChainCall / ChainDot / ChainCallParens / ChainIndex
+
+// whitespace function call
+ChainCall <- SomeSpace args:ExpressionList {
+  return ChainCallNode{args.([]any)}, nil
+}
+
+ChainCallParens <- "(" White args:ExpressionList White ")" {
+  return ChainCallNode{args.([]any)}, nil
+}
+
+ChainDot <- "." White name:Name {
+  return ChainDotNode{name.(string)}, nil
+}
+
+ChainIndex <- "[" White exp:Expression White "]" {
+  return ChainIndexNode{exp}, nil
+}
+
 

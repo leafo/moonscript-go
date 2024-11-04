@@ -1,0 +1,186 @@
+{
+  "Lines": [
+    {
+      "Ops": [
+        {
+          "Arguments": [
+            {
+              "Delimiter": "\"",
+              "StringParts": [
+                "world"
+              ]
+            }
+          ]
+        }
+      ],
+      "Target": {
+        "Ref": "hello"
+      }
+    },
+    {
+      "Ops": [
+        {
+          "Arguments": [
+            {
+              "Delimiter": "\"",
+              "StringParts": [
+                "world"
+              ]
+            },
+            {
+              "Delimiter": "\"",
+              "StringParts": [
+                "again"
+              ]
+            }
+          ]
+        }
+      ],
+      "Target": {
+        "Ref": "hello"
+      }
+    },
+    {
+      "Ops": [
+        {
+          "Arguments": [
+            {
+              "Ops": [
+                {
+                  "Arguments": [
+                    {
+                      "Ops": [
+                        {
+                          "Arguments": [
+                            {
+                              "Ref": "four"
+                            }
+                          ]
+                        }
+                      ],
+                      "Target": {
+                        "Ref": "three"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "Target": {
+                "Ref": "two"
+              }
+            }
+          ]
+        }
+      ],
+      "Target": {
+        "Ref": "one"
+      }
+    },
+    {
+      "Ops": [
+        {
+          "Field": "two"
+        },
+        {
+          "Field": "three"
+        },
+        {
+          "Field": "four"
+        }
+      ],
+      "Target": {
+        "Ref": "one"
+      }
+    },
+    {
+      "Ops": [
+        {
+          "Index": {
+            "Ref": "two"
+          }
+        },
+        {
+          "Index": {
+            "Ref": "three"
+          }
+        },
+        {
+          "Index": {
+            "Ref": "four"
+          }
+        }
+      ],
+      "Target": {
+        "Ref": "one"
+      }
+    },
+    {
+      "Ops": [
+        {
+          "Index": {
+            "Ref": "two"
+          }
+        },
+        {
+          "Index": {
+            "Ref": "three"
+          }
+        },
+        {
+          "Index": {
+            "Ref": "four"
+          }
+        }
+      ],
+      "Target": {
+        "Ref": "one"
+      }
+    },
+    {
+      "Ops": [
+        {
+          "Arguments": [
+            {
+              "Ref": "world"
+            },
+            {
+              "Ref": "test"
+            }
+          ]
+        }
+      ],
+      "Target": {
+        "Ref": "hello"
+      }
+    },
+    {
+      "Ops": [
+        {
+          "Index": {
+            "Ref": "two"
+          }
+        },
+        {
+          "Field": "three"
+        },
+        {
+          "Arguments": [
+            {
+              "Ref": "four"
+            }
+          ]
+        },
+        {
+          "Arguments": [
+            {
+              "Ref": "five"
+            }
+          ]
+        }
+      ],
+      "Target": {
+        "Ref": "one"
+      }
+    }
+  ]
+}
