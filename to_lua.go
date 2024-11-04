@@ -221,3 +221,63 @@ func (n ChainIndexNode) ToLua() (string, error) {
 
 	return fmt.Sprintf("[%s]", index), nil
 }
+
+func (n TableNode) ToLua() (string, error) {
+	var buf strings.Builder
+	buf.WriteString("{")
+
+	for i, tuple := range n.Tuples {
+		if i > 0 {
+			buf.WriteString(", ")
+		}
+
+		if tuple.Key == nil {
+			// Array-style entry
+			valueNode, ok := tuple.Value.(Node)
+			if !ok {
+				return "", fmt.Errorf("TableNode: unknown value type: %T", tuple.Value)
+			}
+			value, err := valueNode.ToLua()
+			if err != nil {
+				return "", err
+			}
+			buf.WriteString(value)
+		} else {
+			// Key-value pair
+			switch tuple.Key.(type) {
+			case string:
+				key := tuple.Key.(string)
+				buf.WriteString(key)
+				buf.WriteString(" = ")
+			case Node:
+				keyNode := tuple.Key.(Node)
+
+				keyLua, err := keyNode.ToLua()
+				if err != nil {
+					return "", err
+				}
+
+				buf.WriteString("[")
+				buf.WriteString(keyLua)
+				buf.WriteString("] = ")
+			default:
+				return "", fmt.Errorf("TableNode: unknown key type: %T", tuple.Key)
+			}
+
+			valueNode, ok := tuple.Value.(Node)
+			if !ok {
+				return "", fmt.Errorf("TableNode: unknown value type: %T", tuple.Value)
+			}
+
+			value, err := valueNode.ToLua()
+			if err != nil {
+				return "", err
+			}
+
+			buf.WriteString(value)
+		}
+	}
+
+	buf.WriteString("}")
+	return buf.String(), nil
+}

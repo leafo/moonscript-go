@@ -14,3 +14,6 @@ one("day").three[9] four, "baby", go false
 thing = dog and5
 
 value = "one" .. two .. "three"
+
+t = {}
+t = {1,2,3}
