@@ -105,6 +105,28 @@
       "Names": [
         "num"
       ]
+    },
+    {
+      "Exprs": [
+        {
+          "Expression": {
+            "Head": {
+              "Ref": "one"
+            },
+            "Rest": [
+              {
+                "Operator": "+",
+                "Value": {
+                  "Ref": "two"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "Names": [
+        "thing"
+      ]
     }
   ]
 }

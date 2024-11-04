@@ -55,7 +55,7 @@ OperatorExpression <- Space operator:Operator White exp:ExpressionValue {
 
 ExpressionValue <- Primitive / Number / Ref / String / Table / Parens
 
-Parens <- "(" exp:Expression ")" {
+Parens <- "(" White exp:Expression White ")" {
   return ParensNode{exp}, nil
 }
 
