@@ -133,3 +133,18 @@ type ElseIfStatementNode struct {
 	Condition any
 	Lines     []any
 }
+
+type FunctionExpressionNode struct {
+	IsMethod  bool
+	Arguments []ArgumentTuple
+	Lines     []any
+}
+
+type ArgumentTuple struct {
+	Name         any // string or ref to self
+	DefaultValue any
+}
+
+type ReturnNode struct {
+	Expressions []any
+}

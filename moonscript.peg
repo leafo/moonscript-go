@@ -6,6 +6,11 @@ func toSlice[T any](v any) []T {
     return nil
   }
 
+  // if it's already the right type, just return it
+  if _, ok := v.([]T); ok {
+    return v.([]T)
+  }
+
   originalSlice := v.([]any)
   newSlice := make([]T, len(originalSlice))
 
@@ -44,9 +49,9 @@ SpaceStop <- Space Stop
 AlphaNum <- [a-zA-Z0-9_]
 
 // A Line mathes the end of the line and advances to the next line
-Line <- EmptyLine / CommentLine / AssignmentLine / IfStatement / ExpressionLine
+Line <- EmptyLine / CommentLine / AssignmentLine / ReturnLine / IfLine / ExpressionLine
 
-Keyword <- "if" / "then" / "elseif" / "else"
+Keyword <- "if" / "then" / "elseif" / "else" / "return" / "function"
 
 EmptyLine <- (Space Break / [ \t]+ Stop) {
   return nil, nil
@@ -75,7 +80,7 @@ OperatorExpression <- Space operator:Operator White exp:ExpressionValue {
   return OperatorExpressionNode{operator.(string), exp}, nil
 }
 
-ExpressionValue <- Primitive / Number / Chain / Ref / String / Table / Parens
+ExpressionValue <- Primitive / Number / Chain / Ref / String / Table / Parens / FunctionExpression
 
 Parens <- "(" White exp:Expression White ")" {
   return ParensNode{exp}, nil
@@ -92,7 +97,6 @@ ExpressionList <- head:Expression tail:ExpressionListTail* {
 }
 
 ExpressionListTail <- Space "," White expr:Expression {
-
   return expr, nil
 }
 
@@ -102,7 +106,7 @@ Operator <- ([-+*/^%<>] / WordOperator) {
 
 WordOperator <- ("and" / "or") !AlphaNum / ".."
 
-AssignmentLine <- names:NameList White "=" White exprs:ExpressionList Stop {
+AssignmentLine <- names:NameList White "=" White exprs:ExpressionList SpaceStop {
   return AssignmentNode{names.([]any), exprs.([]any)}, nil
 }
 
@@ -327,15 +331,27 @@ IndentLines <- EmptyLine* head:InitialIndentLine tail:IndentLine* PopIndent {
   return lines, nil
 }
 
-
-IfStatement <- "if" Space condition:Expression Space lines:(ConditionLine / ConditionBlock) else_if_blocks:ElseIfBlock* else_lines:(ElseBlock / ElseLine)? {
-  return IfStatementNode{
-    condition,
-    lines.([]any),
-    toSlice[ElseIfStatementNode](else_if_blocks),
-    toSlice[any](else_lines),
-  }, nil
+ReturnLine <- "return" Space exprs:ExpressionList SpaceStop {
+  return ReturnNode{exprs.([]any)}, nil
 }
+
+IfLine <- line:IfStatement SpaceStop {
+  return line, nil
+}
+
+IfStatement <- "if" Space
+  condition:Expression Space
+  lines:(ConditionLine / ConditionBlock)
+  else_if_blocks:ElseIfBlock*
+  else_lines:(ElseBlock / ElseLine)?
+  {
+    return IfStatementNode{
+      condition,
+      lines.([]any),
+      toSlice[ElseIfStatementNode](else_if_blocks),
+      toSlice[any](else_lines),
+    }, nil
+  }
 
 ConditionLine <- "then" Space line:Line {
   return []any{line}, nil
@@ -356,4 +372,25 @@ ElseBlock <- "else" SpaceStop lines:IndentLines {
 ElseLine <- "else" Space line:Line {
   return []any{line}, nil
 }
+
+FunctionExpression <- args:FunctionArguments? Space "->"  lines:IndentLines {
+  return FunctionExpressionNode{false, toSlice[ArgumentTuple](args), lines.([]any)}, nil
+}
+
+FunctionArguments <- "(" Space names:NameList? Space ")" {
+  strNames := toSlice[string](names)
+
+  if strNames == nil {
+    return nil, nil
+  }
+
+  tuples := make([]ArgumentTuple, 0, len(strNames))
+
+  for _, name := range strNames {
+    tuples = append(tuples, ArgumentTuple{name, nil})
+  }
+
+  return tuples, nil
+}
+
 

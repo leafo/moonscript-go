@@ -387,3 +387,67 @@ func (n IfStatementNode) ToLua(state *LuaRenderState) (string, error) {
 	buf.WriteString(state.WithIndent("end"))
 	return buf.String(), nil
 }
+
+func (n FunctionExpressionNode) ToLua(state *LuaRenderState) (string, error) {
+	var buf strings.Builder
+
+	buf.WriteString("function(")
+
+	for i, arg := range n.Arguments {
+		if i > 0 {
+			buf.WriteString(", ")
+		}
+		argName, ok := arg.Name.(string)
+		if !ok {
+			return "", fmt.Errorf("FunctionExpressionNode: argument name is not a string: %T", arg.Name)
+		}
+		buf.WriteString(argName)
+	}
+
+	buf.WriteString(")\n")
+
+	state.Indent += 1
+
+	for _, line := range n.Lines {
+		lineNode, ok := line.(Node)
+		if !ok {
+			return "", fmt.Errorf("FunctionExpressionNode: unknown line type: %T", line)
+		}
+
+		lineStr, err := lineNode.ToLua(state)
+		if err != nil {
+			return "", err
+		}
+
+		buf.WriteString(state.WithIndent(lineStr))
+		buf.WriteString("\n")
+	}
+
+	state.Indent -= 1
+
+	buf.WriteString(state.WithIndent("end"))
+	return buf.String(), nil
+}
+
+func (n ReturnNode) ToLua(state *LuaRenderState) (string, error) {
+	var buf strings.Builder
+
+	buf.WriteString("return ")
+
+	for i, expr := range n.Expressions {
+		if i > 0 {
+			buf.WriteString(", ")
+		}
+		exprNode, ok := expr.(Node)
+		if !ok {
+			return "", fmt.Errorf("ReturnNode: unknown expression type: %T", expr)
+		}
+		exprStr, err := exprNode.ToLua(state)
+		if err != nil {
+			return "", err
+		}
+		buf.WriteString(exprStr)
+	}
+
+	return buf.String(), nil
+}

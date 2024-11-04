@@ -292,6 +292,50 @@
       "Target": {
         "Ref": "hello"
       }
+    },
+    {
+      "Ops": [
+        {
+          "Field": "world"
+        }
+      ],
+      "Target": {
+        "Ref": "hello"
+      }
+    },
+    {
+      "Ops": [
+        {
+          "Arguments": [
+            {
+              "Ref": "thing"
+            }
+          ]
+        }
+      ],
+      "Target": {
+        "Ref": "self"
+      }
+    },
+    {
+      "Comment": " this should probably be handled via tranformer"
+    },
+    {
+      "Ops": [
+        {
+          "Arguments": [
+            {
+              "Delimiter": "\"",
+              "StringParts": [
+                "yup"
+              ]
+            }
+          ]
+        }
+      ],
+      "Target": {
+        "Ref": "zonkers"
+      }
     }
   ]
 }

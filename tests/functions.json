@@ -1,0 +1,59 @@
+{
+  "Lines": [
+    {
+      "Arguments": null,
+      "IsMethod": false,
+      "Lines": [
+        {
+          "Ops": [
+            {
+              "Arguments": [
+                {
+                  "Delimiter": "\"",
+                  "StringParts": [
+                    "hello world"
+                  ]
+                }
+              ]
+            }
+          ],
+          "Target": {
+            "Ref": "print"
+          }
+        }
+      ]
+    },
+    {
+      "Arguments": [
+        {
+          "DefaultValue": null,
+          "Name": "a"
+        },
+        {
+          "DefaultValue": null,
+          "Name": "b"
+        }
+      ],
+      "IsMethod": false,
+      "Lines": [
+        {
+          "Expressions": [
+            {
+              "Head": {
+                "Ref": "a"
+              },
+              "Rest": [
+                {
+                  "Operator": "+",
+                  "Value": {
+                    "Ref": "b"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
