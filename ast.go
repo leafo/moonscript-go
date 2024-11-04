@@ -3,15 +3,24 @@ package main
 import "encoding/json"
 
 type Lines struct {
-	Nodes []any
+	Lines []any
+}
+
+type TableNode struct {
+	Tuples []TableTuple
+}
+
+type TableTuple struct {
+	Key   any // can be nil for array positional value
+	Value any
 }
 
 type CommentNode struct {
-	Text string
+	Comment string
 }
 
 type PrimitiveNode struct {
-	Value string
+	Primitive string
 }
 
 type AssignmentNode struct {

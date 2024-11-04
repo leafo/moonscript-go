@@ -11,18 +11,6 @@ Input <- lines:Line* EOF {
       continue
     }
 
-    // switch line := line.(type) {
-    // case CommentNode:
-    //   fmt.Println("This is a comment:", line.Text)
-    // case NumberNode:
-    //   fmt.Println("This is a number:", line.Text)
-    // case RefNode:
-    //   fmt.Println("This is a reference:", line.Name)
-    // default:
-    //   fmt.Printf("Unknown node type: %T: %v\n", line, line)
-    //   continue
-    // }
-
     outLines = append(outLines, line)
   }
 
@@ -65,7 +53,7 @@ OperatorExpression <- Space operator:Operator White exp:ExpressionValue {
   return OperatorExpressionNode{operator.(string), exp}, nil
 }
 
-ExpressionValue <- Primitive / Number / Ref / String
+ExpressionValue <- Primitive / Number / Ref / String / Table
 
 ExpressionList <- head:Expression tail:ExpressionListTail* {
   exprs := make([]any, 0, 1)
@@ -78,6 +66,7 @@ ExpressionList <- head:Expression tail:ExpressionListTail* {
 }
 
 ExpressionListTail <- Space "," White expr:Expression {
+
   return expr, nil
 }
 
@@ -179,5 +168,49 @@ LuaStringClose <- "]" count:LuaStringDelimiterCount "]" &{
 Primitive <- ("true" / "false" / "nil") {
   return PrimitiveNode{string(c.text)}, nil
 }
+
+
+Table <- "{" White tuples:TableElementList? White "}" {
+  if tuples == nil {
+    return TableNode{nil}, nil
+  } else {
+    return TableNode{tuples.([]TableTuple)}, nil
+  }
+}
+
+TableElementList <- head:TableElement tail:TableElementTail* {
+  tuples := make([]TableTuple, 0, 1)
+  tuples = append(tuples, head.(TableTuple))
+  for _, t := range tail.([]any) {
+    tuples = append(tuples, t.(TableTuple))
+  }
+
+  return tuples, nil
+}
+
+TableElement <- el:(TableTuple / Expression) {
+  switch el.(type) {
+  case TableTuple:
+    return el, nil
+  default:
+    // convert single value into table tuple
+    return TableTuple{nil, el}, nil
+  }
+}
+
+TableTuple <- name:(Name / TableTupleKeyExpression ) ":" White exp:Expression {
+  return TableTuple{name, exp}, nil
+}
+
+TableTupleKeyExpression <- "[" White exp:Expression White "]" {
+  return exp, nil
+}
+
+TableElementTail <- Space ("," / Break ) White el:TableElement {
+  return el, nil
+}
+
+
+
 
 
