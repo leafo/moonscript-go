@@ -5,7 +5,7 @@ import (
 )
 
 type Node interface {
-	ToLua() (string, error)
+	ToLua(*LuaRenderState) (string, error)
 }
 
 type Lines struct {

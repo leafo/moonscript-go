@@ -5,8 +5,19 @@ import (
 	"strings"
 )
 
-func (l Lines) ToLua() (string, error) {
-	var out []string
+const INDENT_STR = "  "
+
+type LuaRenderState struct {
+	Indent int
+}
+
+func (state *LuaRenderState) WithIndent(str string) string {
+	indentation := strings.Repeat(INDENT_STR, state.Indent)
+	return indentation + str
+}
+
+func (l Lines) ToLua(state *LuaRenderState) (string, error) {
+	var buf strings.Builder
 
 	for _, line := range l.Lines {
 		if line == nil {
@@ -17,25 +28,26 @@ func (l Lines) ToLua() (string, error) {
 		if !success {
 			return "", fmt.Errorf("unknown node type: %T", line)
 		}
-		marshaled, err := lineNode.ToLua()
+		marshaled, err := lineNode.ToLua(state)
 		if err != nil {
 			return "", err
 		}
-		out = append(out, marshaled)
+		buf.WriteString(state.WithIndent(marshaled))
+		buf.WriteString("\n")
 	}
 
-	return strings.Join(out, "\n"), nil
+	return buf.String(), nil
 }
 
-func (n CommentNode) ToLua() (string, error) {
+func (n CommentNode) ToLua(state *LuaRenderState) (string, error) {
 	return fmt.Sprintf("--%s", n.Comment), nil
 }
 
-func (n PrimitiveNode) ToLua() (string, error) {
+func (n PrimitiveNode) ToLua(state *LuaRenderState) (string, error) {
 	return n.Primitive, nil
 }
 
-func (n AssignmentNode) ToLua() (string, error) {
+func (n AssignmentNode) ToLua(state *LuaRenderState) (string, error) {
 	var buf strings.Builder
 
 	for i, name := range n.Names {
@@ -48,7 +60,7 @@ func (n AssignmentNode) ToLua() (string, error) {
 
 		switch n := name.(type) {
 		case Node:
-			marshaled, err = n.ToLua()
+			marshaled, err = n.ToLua(state)
 			if err != nil {
 				return "", err
 			}
@@ -72,7 +84,7 @@ func (n AssignmentNode) ToLua() (string, error) {
 		if !success {
 			return "", fmt.Errorf("AssignmentNode: unknown value type: %T", expr)
 		}
-		marshaled, err := exprNode.ToLua()
+		marshaled, err := exprNode.ToLua(state)
 		if err != nil {
 			return "", err
 		}
@@ -82,7 +94,7 @@ func (n AssignmentNode) ToLua() (string, error) {
 	return buf.String(), nil
 }
 
-func (n StringNode) ToLua() (string, error) {
+func (n StringNode) ToLua(state *LuaRenderState) (string, error) {
 	var out []string
 	for _, part := range n.StringParts {
 		val, isString := part.(string)
@@ -97,15 +109,15 @@ func (n StringNode) ToLua() (string, error) {
 	return fmt.Sprintf("%s%s%s", n.Delimiter, strings.Join(out, ""), n.Delimiter), nil
 }
 
-func (n NumberNode) ToLua() (string, error) {
+func (n NumberNode) ToLua(state *LuaRenderState) (string, error) {
 	return n.Text, nil
 }
 
-func (n RefNode) ToLua() (string, error) {
+func (n RefNode) ToLua(state *LuaRenderState) (string, error) {
 	return n.Ref, nil
 }
 
-func (n ExpressionNode) ToLua() (string, error) {
+func (n ExpressionNode) ToLua(state *LuaRenderState) (string, error) {
 	var buf strings.Builder
 
 	headNode, success := n.Head.(Node)
@@ -113,7 +125,7 @@ func (n ExpressionNode) ToLua() (string, error) {
 		return "", fmt.Errorf("ExpressionNode: unknown head type: %T", n.Head)
 	}
 
-	head, err := headNode.ToLua()
+	head, err := headNode.ToLua(state)
 	if err != nil {
 		return "", err
 	}
@@ -126,7 +138,7 @@ func (n ExpressionNode) ToLua() (string, error) {
 			return "", fmt.Errorf("ExpressionNode: unknown value type: %T", op.Value)
 		}
 
-		valStr, err := val.ToLua()
+		valStr, err := val.ToLua(state)
 		if err != nil {
 			return "", err
 		}
@@ -140,13 +152,13 @@ func (n ExpressionNode) ToLua() (string, error) {
 	return buf.String(), nil
 }
 
-func (n ParensNode) ToLua() (string, error) {
+func (n ParensNode) ToLua(state *LuaRenderState) (string, error) {
 	exprNode, success := n.Expression.(Node)
 	if !success {
 		return "", fmt.Errorf("ParensNode: unknown expression type: %T", n.Expression)
 	}
 
-	expr, err := exprNode.ToLua()
+	expr, err := exprNode.ToLua(state)
 	if err != nil {
 		return "", err
 	}
@@ -154,7 +166,7 @@ func (n ParensNode) ToLua() (string, error) {
 	return fmt.Sprintf("(%s)", expr), nil
 }
 
-func (n ChainNode) ToLua() (string, error) {
+func (n ChainNode) ToLua(state *LuaRenderState) (string, error) {
 	var buf strings.Builder
 
 	targetNode, ok := n.Target.(Node)
@@ -162,7 +174,7 @@ func (n ChainNode) ToLua() (string, error) {
 		return "", fmt.Errorf("ChainNode: unknown target type: %T", n.Target)
 	}
 
-	target, err := targetNode.ToLua()
+	target, err := targetNode.ToLua(state)
 	if err != nil {
 		return "", err
 	}
@@ -175,7 +187,7 @@ func (n ChainNode) ToLua() (string, error) {
 			return "", fmt.Errorf("ChainNode: unknown op type: %T", op)
 		}
 
-		opStr, err := opNode.ToLua()
+		opStr, err := opNode.ToLua(state)
 		if err != nil {
 			return "", err
 		}
@@ -186,7 +198,7 @@ func (n ChainNode) ToLua() (string, error) {
 	return buf.String(), nil
 }
 
-func (n ChainCallNode) ToLua() (string, error) {
+func (n ChainCallNode) ToLua(state *LuaRenderState) (string, error) {
 	var args []string
 	for _, arg := range n.Arguments {
 		argNode, ok := arg.(Node)
@@ -194,7 +206,7 @@ func (n ChainCallNode) ToLua() (string, error) {
 			return "", fmt.Errorf("ChainCallNode: unknown argument type: %T", arg)
 		}
 
-		argStr, err := argNode.ToLua()
+		argStr, err := argNode.ToLua(state)
 		if err != nil {
 			return "", err
 		}
@@ -204,17 +216,17 @@ func (n ChainCallNode) ToLua() (string, error) {
 	return fmt.Sprintf("(%s)", strings.Join(args, ", ")), nil
 }
 
-func (n ChainDotNode) ToLua() (string, error) {
+func (n ChainDotNode) ToLua(state *LuaRenderState) (string, error) {
 	return "." + n.Field, nil
 }
 
-func (n ChainIndexNode) ToLua() (string, error) {
+func (n ChainIndexNode) ToLua(state *LuaRenderState) (string, error) {
 	indexNode, ok := n.Index.(Node)
 	if !ok {
 		return "", fmt.Errorf("ChainIndexNode: unknown index type: %T", n.Index)
 	}
 
-	index, err := indexNode.ToLua()
+	index, err := indexNode.ToLua(state)
 	if err != nil {
 		return "", err
 	}
@@ -222,7 +234,7 @@ func (n ChainIndexNode) ToLua() (string, error) {
 	return fmt.Sprintf("[%s]", index), nil
 }
 
-func (n TableNode) ToLua() (string, error) {
+func (n TableNode) ToLua(state *LuaRenderState) (string, error) {
 	var buf strings.Builder
 	buf.WriteString("{")
 
@@ -237,7 +249,7 @@ func (n TableNode) ToLua() (string, error) {
 			if !ok {
 				return "", fmt.Errorf("TableNode: unknown value type: %T", tuple.Value)
 			}
-			value, err := valueNode.ToLua()
+			value, err := valueNode.ToLua(state)
 			if err != nil {
 				return "", err
 			}
@@ -252,7 +264,7 @@ func (n TableNode) ToLua() (string, error) {
 			case Node:
 				keyNode := tuple.Key.(Node)
 
-				keyLua, err := keyNode.ToLua()
+				keyLua, err := keyNode.ToLua(state)
 				if err != nil {
 					return "", err
 				}
@@ -269,7 +281,7 @@ func (n TableNode) ToLua() (string, error) {
 				return "", fmt.Errorf("TableNode: unknown value type: %T", tuple.Value)
 			}
 
-			value, err := valueNode.ToLua()
+			value, err := valueNode.ToLua(state)
 			if err != nil {
 				return "", err
 			}
@@ -279,5 +291,39 @@ func (n TableNode) ToLua() (string, error) {
 	}
 
 	buf.WriteString("}")
+	return buf.String(), nil
+}
+
+func (n IfStatementNode) ToLua(state *LuaRenderState) (string, error) {
+	conditionStr, err := n.Condition.(Node).ToLua(state)
+	if err != nil {
+		return "", err
+	}
+
+	var buf strings.Builder
+	buf.WriteString("if ")
+	buf.WriteString(conditionStr)
+	buf.WriteString(" then\n")
+
+	state.Indent += 1
+
+	for _, line := range n.Lines {
+		lineNode, ok := line.(Node)
+		if !ok {
+			return "", fmt.Errorf("IfStatementNode: unknown line type: %T", line)
+		}
+
+		lineStr, err := lineNode.ToLua(state)
+		if err != nil {
+			return "", err
+		}
+
+		buf.WriteString(state.WithIndent(lineStr))
+		buf.WriteString("\n")
+	}
+
+	state.Indent -= 1
+
+	buf.WriteString(state.WithIndent("end"))
 	return buf.String(), nil
 }

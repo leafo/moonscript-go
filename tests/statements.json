@@ -42,6 +42,9 @@
       }
     },
     {
+      "Comment": " first comment"
+    },
+    {
       "Condition": {
         "Primitive": "true"
       },
@@ -81,12 +84,48 @@
       ]
     },
     {
+      "Comment": " second comment"
+    },
+    {
       "Condition": {
         "Ref": "one"
       },
       "Lines": [
         {
-          "Ref": "first"
+          "Comment": " what is comment here"
+        },
+        {
+          "Ops": [
+            {
+              "Arguments": [
+                {
+                  "Tuples": [
+                    {
+                      "Key": null,
+                      "Value": {
+                        "Delimiter": "\"",
+                        "StringParts": [
+                          "two"
+                        ]
+                      }
+                    },
+                    {
+                      "Key": null,
+                      "Value": {
+                        "Delimiter": "\"",
+                        "StringParts": [
+                          "four"
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "Target": {
+            "Ref": "call"
+          }
         },
         {
           "Condition": {
@@ -97,6 +136,9 @@
               "Ref": "second"
             }
           ]
+        },
+        {
+          "Comment": " here is comment "
         },
         {
           "Ref": "third"

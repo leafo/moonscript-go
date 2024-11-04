@@ -31,11 +31,12 @@ func main() {
 		}
 		fmt.Println(string(jsonResult))
 	} else {
-		luaCode, err := result.(Node).ToLua()
+		renderState := &LuaRenderState{}
+		luaCode, err := result.(Node).ToLua(renderState)
 		if err != nil {
 			fmt.Println("Error converting to Lua:", err)
 			os.Exit(1)
 		}
-		fmt.Println(luaCode)
+		fmt.Print(luaCode)
 	}
 }

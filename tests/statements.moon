@@ -4,18 +4,24 @@ if something
 
 print "End"
 
+-- first comment
 if true
   value = 2,3
   list = {value}
 
 
+-- second comment
 if one
-  first
+  -- what is comment here
+  call {
+    "two"
+    "four"
+  }
   if two
     second
 
+  -- here is comment 
   third
-
 
 final
 
