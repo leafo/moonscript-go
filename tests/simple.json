@@ -1,0 +1,235 @@
+{
+  "Lines": [
+    {
+      "Comment": " Hello world"
+    },
+    {
+      "Exprs": [
+        {
+          "Delimiter": "\"",
+          "StringParts": [
+            "hello world"
+          ]
+        },
+        {
+          "Text": "3",
+          "Type": "Integer"
+        }
+      ],
+      "Names": [
+        "a",
+        "b"
+      ]
+    },
+    {
+      "Exprs": [
+        {
+          "Head": {
+            "Ref": "a"
+          },
+          "Rest": [
+            {
+              "Operator": "+",
+              "Value": {
+                "Ref": "b"
+              }
+            }
+          ]
+        }
+      ],
+      "Names": [
+        "one"
+      ]
+    },
+    {
+      "Exprs": [
+        {
+          "Head": {
+            "Expression": {
+              "Head": {
+                "Ref": "a"
+              },
+              "Rest": [
+                {
+                  "Operator": "+",
+                  "Value": {
+                    "Ref": "b"
+                  }
+                }
+              ]
+            }
+          },
+          "Rest": [
+            {
+              "Operator": "*",
+              "Value": {
+                "Text": "2",
+                "Type": "Integer"
+              }
+            }
+          ]
+        }
+      ],
+      "Names": [
+        "two"
+      ]
+    },
+    {
+      "Exprs": [
+        {
+          "Head": {
+            "Primitive": "false"
+          },
+          "Rest": [
+            {
+              "Operator": "or",
+              "Value": {
+                "Primitive": "true"
+              }
+            },
+            {
+              "Operator": "and",
+              "Value": {
+                "Primitive": "nil"
+              }
+            }
+          ]
+        }
+      ],
+      "Names": [
+        "the_day"
+      ]
+    },
+    {
+      "Ops": [
+        {
+          "Arguments": [
+            {
+              "Delimiter": "\"",
+              "StringParts": [
+                "day"
+              ]
+            }
+          ]
+        },
+        {
+          "Field": "three"
+        },
+        {
+          "Index": {
+            "Text": "9",
+            "Type": "Integer"
+          }
+        },
+        {
+          "Arguments": [
+            {
+              "Ref": "four"
+            },
+            {
+              "Delimiter": "\"",
+              "StringParts": [
+                "baby"
+              ]
+            },
+            {
+              "Ops": [
+                {
+                  "Arguments": [
+                    {
+                      "Primitive": "false"
+                    }
+                  ]
+                }
+              ],
+              "Target": {
+                "Ref": "go"
+              }
+            }
+          ]
+        }
+      ],
+      "Target": {
+        "Ref": "one"
+      }
+    },
+    {
+      "Ops": [
+        {
+          "Field": "format"
+        },
+        {
+          "Arguments": [
+            {
+              "Delimiter": "\"",
+              "StringParts": [
+                "%d"
+              ]
+            }
+          ]
+        }
+      ],
+      "Target": {
+        "Expression": {
+          "Delimiter": "\"",
+          "StringParts": [
+            "my string"
+          ]
+        }
+      }
+    },
+    {
+      "Exprs": [
+        {
+          "Ops": [
+            {
+              "Arguments": [
+                {
+                  "Ref": "and5"
+                }
+              ]
+            }
+          ],
+          "Target": {
+            "Ref": "dog"
+          }
+        }
+      ],
+      "Names": [
+        "thing"
+      ]
+    },
+    {
+      "Exprs": [
+        {
+          "Head": {
+            "Delimiter": "\"",
+            "StringParts": [
+              "one"
+            ]
+          },
+          "Rest": [
+            {
+              "Operator": "..",
+              "Value": {
+                "Ref": "two"
+              }
+            },
+            {
+              "Operator": "..",
+              "Value": {
+                "Delimiter": "\"",
+                "StringParts": [
+                  "three"
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "Names": [
+        "value"
+      ]
+    }
+  ]
+}

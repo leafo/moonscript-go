@@ -24,6 +24,7 @@ Space <- [ \t]*
 SomeSpace <- [ \t]+
 Break <- "\r"? "\n"
 Stop <- Break / EOF
+AlphaNum <- [a-zA-Z0-9_]
 
 Line <- EmptyLine / CommentLine / AssignmentLine / ExpressionLine
 
@@ -75,9 +76,11 @@ ExpressionListTail <- Space "," White expr:Expression {
   return expr, nil
 }
 
-Operator <- [-+*/^%<>] {
+Operator <- ([-+*/^%<>] / WordOperator) {
   return string(c.text), nil
 }
+
+WordOperator <- ("and" / "or") !AlphaNum / ".."
 
 AssignmentLine <- names:NameList White "=" White exprs:ExpressionList Stop {
   return AssignmentNode{names.([]any), exprs.([]any)}, nil

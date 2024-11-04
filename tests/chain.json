@@ -181,6 +181,84 @@
       "Target": {
         "Ref": "one"
       }
+    },
+    {
+      "Ops": [
+        {
+          "Arguments": [
+            {
+              "Delimiter": "\"",
+              "StringParts": [
+                "day"
+              ]
+            }
+          ]
+        },
+        {
+          "Field": "three"
+        },
+        {
+          "Index": {
+            "Text": "9",
+            "Type": "Integer"
+          }
+        },
+        {
+          "Arguments": [
+            {
+              "Ref": "four"
+            },
+            {
+              "Delimiter": "\"",
+              "StringParts": [
+                "baby"
+              ]
+            },
+            {
+              "Ops": [
+                {
+                  "Arguments": [
+                    {
+                      "Primitive": "false"
+                    }
+                  ]
+                }
+              ],
+              "Target": {
+                "Ref": "go"
+              }
+            }
+          ]
+        }
+      ],
+      "Target": {
+        "Ref": "one"
+      }
+    },
+    {
+      "Ops": [
+        {
+          "Field": "format"
+        },
+        {
+          "Arguments": [
+            {
+              "Delimiter": "\"",
+              "StringParts": [
+                "%d"
+              ]
+            }
+          ]
+        }
+      ],
+      "Target": {
+        "Expression": {
+          "Delimiter": "\"",
+          "StringParts": [
+            "my string"
+          ]
+        }
+      }
     }
   ]
 }

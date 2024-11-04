@@ -1,6 +1,12 @@
 package main
 
-import "encoding/json"
+import (
+	"encoding/json"
+)
+
+type Node interface {
+	ToLua() (string, error)
+}
 
 type Lines struct {
 	Lines []any
@@ -87,19 +93,23 @@ type ParensNode struct {
 	Expression any
 }
 
+// starts a chain with seriers of chain operations like indexing or calling
 type ChainNode struct {
 	Target any
 	Ops    []any
 }
 
+// calls a function with arguments
 type ChainCallNode struct {
 	Arguments []any
 }
 
+// indexes field by name using dot notation
 type ChainDotNode struct {
 	Field string
 }
 
+// indexes field by expression with brackets
 type ChainIndexNode struct {
 	Index any
 }
