@@ -1,12 +1,13 @@
+.PHONY: test-%
 
-
-test: parser.go
-	for file in tests/*.moon; do \
-		echo $$file; \
-		go run . $$file; \
-	done
+# tests/assign.moon - test-assign
+test: parser.go $(patsubst tests/%.moon,test-%,$(wildcard tests/*.moon))
+	@echo "pass"
 
 parser.go: moonscript.peg
-	pigeon -o parser.go moonscript.peg
+	@pigeon -o parser.go moonscript.peg
+
+test-%: parser.go
+	@go run . tests/$*.moon
 
 
