@@ -1,0 +1,13 @@
+{
+  "Lines": [
+    {
+      "Comment": " here is comment"
+    },
+    {
+      "Comment": " here is another commetn"
+    },
+    {
+      "Comment": " comment ends the file"
+    }
+  ]
+}

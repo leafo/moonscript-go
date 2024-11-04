@@ -1,0 +1,157 @@
+{
+  "Lines": [
+    {
+      "Exprs": [
+        {
+          "Tuples": null
+        }
+      ],
+      "Names": [
+        "a"
+      ]
+    },
+    {
+      "Exprs": [
+        {
+          "Tuples": [
+            {
+              "Key": null,
+              "Value": {
+                "Text": "1",
+                "Type": "Integer"
+              }
+            }
+          ]
+        }
+      ],
+      "Names": [
+        "b"
+      ]
+    },
+    {
+      "Exprs": [
+        {
+          "Tuples": [
+            {
+              "Key": null,
+              "Value": {
+                "Delimiter": "\"",
+                "StringParts": [
+                  "one"
+                ]
+              }
+            },
+            {
+              "Key": null,
+              "Value": {
+                "Delimiter": "\"",
+                "StringParts": [
+                  "two"
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "Names": [
+        "c"
+      ]
+    },
+    {
+      "Exprs": [
+        {
+          "Tuples": [
+            {
+              "Key": "hello",
+              "Value": {
+                "Delimiter": "\"",
+                "StringParts": [
+                  "world"
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "Names": [
+        "d"
+      ]
+    },
+    {
+      "Exprs": [
+        {
+          "Tuples": [
+            {
+              "Key": {
+                "Primitive": "true"
+              },
+              "Value": {
+                "Text": "2",
+                "Type": "Integer"
+              }
+            }
+          ]
+        }
+      ],
+      "Names": [
+        "e"
+      ]
+    },
+    {
+      "Exprs": [
+        {
+          "Tuples": [
+            {
+              "Key": "one",
+              "Value": {
+                "Ref": "two"
+              }
+            },
+            {
+              "Key": {
+                "Delimiter": "\"",
+                "StringParts": [
+                  "three"
+                ]
+              },
+              "Value": {
+                "Text": "4",
+                "Type": "Integer"
+              }
+            },
+            {
+              "Key": "no",
+              "Value": {
+                "Primitive": "true"
+              }
+            },
+            {
+              "Key": null,
+              "Value": {
+                "Text": "7",
+                "Type": "Integer"
+              }
+            },
+            {
+              "Key": null,
+              "Value": {
+                "Text": "8",
+                "Type": "Integer"
+              }
+            },
+            {
+              "Key": null,
+              "Value": {
+                "Text": "9",
+                "Type": "Integer"
+              }
+            }
+          ]
+        }
+      ],
+      "Names": [
+        "f"
+      ]
+    }
+  ]
+}

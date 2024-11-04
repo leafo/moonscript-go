@@ -1,0 +1,99 @@
+{
+  "Lines": [
+    {
+      "Text": "5",
+      "Type": "Integer"
+    },
+    {
+      "Ref": "hello"
+    },
+    {
+      "Delimiter": "\"",
+      "StringParts": [
+        "world"
+      ]
+    },
+    {
+      "Delimiter": "\"",
+      "StringParts": null
+    },
+    {
+      "Delimiter": "\"",
+      "StringParts": [
+        "one world"
+      ]
+    },
+    {
+      "Delimiter": "\"",
+      "StringParts": [
+        "another \\\"  world"
+      ]
+    },
+    {
+      "Delimiter": "\"",
+      "StringParts": [
+        "hello ",
+        {
+          "Expression": {
+            "Ref": "world"
+          }
+        }
+      ]
+    },
+    {
+      "Delimiter": "'",
+      "StringParts": [
+        "single string"
+      ]
+    },
+    {
+      "Delimiter": "'",
+      "StringParts": null
+    },
+    {
+      "Delimiter": "\"",
+      "StringParts": [
+        "heloo wordl"
+      ]
+    },
+    {
+      "Delimiter": "\"",
+      "StringParts": [
+        "hello\n\nworld"
+      ]
+    },
+    {
+      "Delimiter": "'",
+      "StringParts": [
+        "hello \\n\nworld"
+      ]
+    },
+    {
+      "Delimiter": "XXX",
+      "StringParts": [
+        "lua string"
+      ]
+    },
+    {
+      "Delimiter": "XXX",
+      "StringParts": [
+        "lua string with fake ]]closing"
+      ]
+    },
+    {
+      "Delimiter": "XXX",
+      "StringParts": [
+        "[[w]]"
+      ]
+    },
+    {
+      "Primitive": "true"
+    },
+    {
+      "Primitive": "false"
+    },
+    {
+      "Primitive": "nil"
+    }
+  ]
+}

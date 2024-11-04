@@ -1,0 +1,33 @@
+{
+  "Lines": [
+    {
+      "Exprs": [
+        {
+          "Ref": "two"
+        }
+      ],
+      "Names": [
+        "one"
+      ]
+    },
+    {
+      "Exprs": [
+        {
+          "Delimiter": "\"",
+          "StringParts": [
+            "world"
+          ]
+        },
+        {
+          "Text": "52",
+          "Type": "Integer"
+        }
+      ],
+      "Names": [
+        "hello",
+        "world",
+        "zone"
+      ]
+    }
+  ]
+}

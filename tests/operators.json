@@ -1,0 +1,110 @@
+{
+  "Lines": [
+    {
+      "Exprs": [
+        {
+          "Head": {
+            "Text": "5",
+            "Type": "Integer"
+          },
+          "Rest": [
+            {
+              "Operator": "-",
+              "Value": {
+                "Text": "2",
+                "Type": "Integer"
+              }
+            }
+          ]
+        },
+        {
+          "Head": {
+            "Text": "5",
+            "Type": "Integer"
+          },
+          "Rest": [
+            {
+              "Operator": "^",
+              "Value": {
+                "Text": "3",
+                "Type": "Integer"
+              }
+            }
+          ]
+        }
+      ],
+      "Names": [
+        "a",
+        "b"
+      ]
+    },
+    {
+      "Exprs": [
+        {
+          "Delimiter": "\"",
+          "StringParts": [
+            "world",
+            {
+              "Expression": {
+                "Head": {
+                  "Ref": "something"
+                },
+                "Rest": [
+                  {
+                    "Operator": "+",
+                    "Value": {
+                      "Ref": "else"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "Names": [
+        "hello"
+      ]
+    },
+    {
+      "Exprs": [
+        {
+          "Head": {
+            "Expression": {
+              "Head": {
+                "Ref": "a"
+              },
+              "Rest": [
+                {
+                  "Operator": "+",
+                  "Value": {
+                    "Ref": "b"
+                  }
+                }
+              ]
+            }
+          },
+          "Rest": [
+            {
+              "Operator": "^",
+              "Value": {
+                "Text": "2",
+                "Type": "Integer"
+              }
+            },
+            {
+              "Operator": "-",
+              "Value": {
+                "Text": "7",
+                "Type": "Integer"
+              }
+            }
+          ]
+        }
+      ],
+      "Names": [
+        "num"
+      ]
+    }
+  ]
+}
