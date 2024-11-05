@@ -12,6 +12,10 @@ type Lines struct {
 	Lines []any
 }
 
+func (l *Lines) IsEmpty() bool {
+	return len(l.Lines) == 0
+}
+
 type TableNode struct {
 	Tuples []TableTuple
 }
@@ -124,20 +128,20 @@ type ChainIndexNode struct {
 
 type IfStatementNode struct {
 	Condition any
-	Lines     []any
+	Lines
 	ElseIfs   []ElseIfStatementNode
-	ElseLines []any
+	ElseLines Lines
 }
 
 type ElseIfStatementNode struct {
 	Condition any
-	Lines     []any
+	Lines
 }
 
 type FunctionExpressionNode struct {
 	IsMethod  bool
 	Arguments []ArgumentTuple
-	Lines     []any
+	Lines
 }
 
 type ArgumentTuple struct {

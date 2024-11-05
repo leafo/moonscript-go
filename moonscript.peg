@@ -1,43 +1,10 @@
 {
 package main
-
-func toSlice[T any](v any) []T {
-  if v == nil {
-    return nil
-  }
-
-  // if it's already the right type, just return it
-  if _, ok := v.([]T); ok {
-    return v.([]T)
-  }
-
-  originalSlice := v.([]any)
-  newSlice := make([]T, len(originalSlice))
-
-  for i, val := range originalSlice {
-    newSlice[i] = val.(T)
-  }
-
-  return newSlice
 }
 
+Input <- lines:Lines? White EOF {
+  return lines, nil
 }
-
-
-Input <- lines:Line* EOF {
-  outLines := make([]any, 0, len(lines.([]any)))
-
-  for _, line := range lines.([]any) {
-    if line == nil {
-      continue
-    }
-
-    outLines = append(outLines, line)
-  }
-
-  return Lines{outLines}, nil
-}
-
 
 EOF <- !.
 White <- [ \t\r\n]* // includes newlines
@@ -45,21 +12,45 @@ Space <- [ \t]*
 SomeSpace <- [ \t]+
 Break <- "\r"? "\n"
 Stop <- Break / EOF
-SpaceStop <- Space Stop
+SpaceBreak <- Space Break
 AlphaNum <- [a-zA-Z0-9_]
 
-// A Line mathes the end of the line and advances to the next line
-Line <- EmptyLine / CommentLine / AssignmentLine / ReturnLine / IfLine / ExpressionLine
+Lines <- EmptyLine* StartIndent head:Line tail:LinesTail* PopIndent {
+  lines := make([]any, 0, 1)
+  if head != nil {
+    lines = append(lines, head)
+  }
 
-Keyword <- "if" / "then" / "elseif" / "else" / "return" / "function"
+  for _, t := range tail.([]any) {
+    if t == nil {
+      continue
+    }
 
-EmptyLine <- (Space Break / [ \t]+ Stop) {
+    lines = append(lines, t)
+  }
+
+  return Lines{lines}, nil
+}
+
+LinesTail <- Space Break EmptyLine* line:IndentedLine {
+  return line, nil
+}
+
+// NOTE: line is indent checked
+Line <- CommentLine / AssignmentLine / ReturnLine / IfStatement / ExpressionLine
+
+IndentedLine <- MatchIndent line:Line {
+  return line, nil
+}
+
+Keyword <- "if" / "then" / "elseif" / "else" / "return" / "function" / "and" / "or"
+
+EmptyLine <- Space Break {
   return nil, nil
 }
 
-ExpressionLine <- value:Expression Stop {
-  return value, nil
-}
+// for when we need to coerce expressions into lines
+ExpressionLine <- Expression
 
 Expression <- head:ExpressionValue rest:OperatorExpression* {
   r := make([]OperatorExpressionNode, 0, len(rest.([]any)))
@@ -106,7 +97,7 @@ Operator <- ([-+*/^%<>] / WordOperator) {
 
 WordOperator <- ("and" / "or") !AlphaNum / ".."
 
-AssignmentLine <- names:NameList White "=" White exprs:ExpressionList SpaceStop {
+AssignmentLine <- names:NameList White "=" White exprs:ExpressionList {
   return AssignmentNode{names.([]any), exprs.([]any)}, nil
 }
 
@@ -115,7 +106,7 @@ Comment <- "--" body:CommentBody {
 }
 
 // a comment that takes up an entire line
-CommentLine <- Space value:Comment Stop {
+CommentLine <- Space value:Comment {
   return value, nil
 }
 
@@ -141,7 +132,7 @@ NameList <- head:Name tail:NameListTail* {
   return names, nil
 }
 
-Ref <- !Keyword name:Name {
+Ref <- !(Keyword !AlphaNum) name:Name {
   return RefNode{name.(string)}, nil
 } / SelfRef / Self
 
@@ -287,6 +278,16 @@ Indent <- [ \t]* {
   return sum, nil
 }
 
+StartIndent <- indent:Indent &{
+  if currentIndent(c.state) < indent.(int) {
+    return true, nil
+  }
+  return false, nil
+} #{
+  pushIndent(c.state, indent.(int))
+  return nil
+}
+
 // measure the indent and only pass if it matches the current indent
 MatchIndent <- indent:Indent &{
   if currentIndent(c.state) == indent.(int) {
@@ -295,48 +296,13 @@ MatchIndent <- indent:Indent &{
   return false, nil
 }
 
-
-StartIndent <- indent:Indent &{
-  if currentIndent(c.state) < indent.(int) {
-    return true, nil
-  }
-
-  return false, nil
-} #{
-  pushIndent(c.state, indent.(int))
-  return nil
-}
-
-
 PopIndent <- #{
   popIndent(c.state)
   return nil
 }
 
-InitialIndentLine <- StartIndent line:Line {
-  return line, nil
-}
-
-IndentLine <- EmptyLine* MatchIndent line:Line {
-  return line, nil
-}
-
-IndentLines <- EmptyLine* head:InitialIndentLine tail:IndentLine* PopIndent {
-  lines := make([]any, 0, 1)
-  lines = append(lines, head)
-  for _, t := range tail.([]any) {
-    lines = append(lines, t)
-  }
-
-  return lines, nil
-}
-
-ReturnLine <- "return" Space exprs:ExpressionList SpaceStop {
+ReturnLine <- "return" Space exprs:ExpressionList {
   return ReturnNode{exprs.([]any)}, nil
-}
-
-IfLine <- line:IfStatement SpaceStop {
-  return line, nil
 }
 
 IfStatement <- "if" Space
@@ -347,34 +313,38 @@ IfStatement <- "if" Space
   {
     return IfStatementNode{
       condition,
-      lines.([]any),
+      lines.(Lines),
       toSlice[ElseIfStatementNode](else_if_blocks),
-      toSlice[any](else_lines),
+      toValue[Lines](else_lines),
     }, nil
   }
 
 ConditionLine <- "then" Space line:Line {
-  return []any{line}, nil
+  return Lines{[]any{line}}, nil
 }
 
-ConditionBlock <- Break lines:IndentLines {
+ConditionBlock <- Break lines:Lines {
   return lines, nil
 }
 
-ElseIfBlock <- "elseif" Space condition:Expression SpaceStop lines:IndentLines {
-  return ElseIfStatementNode{condition, lines.([]any)}, nil
+ElseIfBlock <- SpaceBreak MatchIndent "elseif" Space condition:Expression SpaceBreak lines:Lines {
+  return ElseIfStatementNode{condition, lines.(Lines)}, nil
 }
 
-ElseBlock <- "else" SpaceStop lines:IndentLines {
+ElseBlock <- SpaceBreak MatchIndent "else" SpaceBreak lines:Lines {
   return lines, nil
 }
 
-ElseLine <- "else" Space line:Line {
-  return []any{line}, nil
+ElseLine <- White "else" Space line:Line {
+  return Lines{[]any{line}}, nil
 }
 
-FunctionExpression <- args:FunctionArguments? Space "->"  lines:IndentLines {
-  return FunctionExpressionNode{false, toSlice[ArgumentTuple](args), lines.([]any)}, nil
+FunctionExpression <- args:FunctionArguments? Space "->" SpaceBreak lines:Lines {
+  return FunctionExpressionNode{
+    false,
+    toSlice[ArgumentTuple](args),
+    lines.(Lines),
+  }, nil
 }
 
 FunctionArguments <- "(" Space names:NameList? Space ")" {

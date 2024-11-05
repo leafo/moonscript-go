@@ -5,7 +5,9 @@
         "Ref": "something"
       },
       "ElseIfs": [],
-      "ElseLines": null,
+      "ElseLines": {
+        "Lines": null
+      },
       "Lines": [
         {
           "Ops": [
@@ -51,7 +53,9 @@
         "Primitive": "true"
       },
       "ElseIfs": [],
-      "ElseLines": null,
+      "ElseLines": {
+        "Lines": null
+      },
       "Lines": [
         {
           "Exprs": [
@@ -95,7 +99,9 @@
         "Ref": "one"
       },
       "ElseIfs": [],
-      "ElseLines": null,
+      "ElseLines": {
+        "Lines": null
+      },
       "Lines": [
         {
           "Comment": " what is comment here"
@@ -138,7 +144,9 @@
             "Ref": "two"
           },
           "ElseIfs": [],
-          "ElseLines": null,
+          "ElseLines": {
+            "Lines": null
+          },
           "Lines": [
             {
               "Ref": "second"
@@ -161,7 +169,9 @@
         "Ref": "fart"
       },
       "ElseIfs": [],
-      "ElseLines": null,
+      "ElseLines": {
+        "Lines": null
+      },
       "Lines": [
         {
           "Ref": "zone"
@@ -173,7 +183,9 @@
         "Ref": "this"
       },
       "ElseIfs": [],
-      "ElseLines": null,
+      "ElseLines": {
+        "Lines": null
+      },
       "Lines": [
         {
           "Ref": "that"
@@ -185,14 +197,16 @@
         "Ref": "something"
       },
       "ElseIfs": [],
-      "ElseLines": [
-        {
-          "Delimiter": "\"",
-          "StringParts": [
-            "bad"
-          ]
-        }
-      ],
+      "ElseLines": {
+        "Lines": [
+          {
+            "Delimiter": "\"",
+            "StringParts": [
+              "bad"
+            ]
+          }
+        ]
+      },
       "Lines": [
         {
           "Delimiter": "\"",
@@ -221,19 +235,88 @@
           ]
         }
       ],
-      "ElseLines": [
-        {
-          "Delimiter": "\"",
-          "StringParts": [
-            "donker"
-          ]
-        }
-      ],
+      "ElseLines": {
+        "Lines": [
+          {
+            "Delimiter": "\"",
+            "StringParts": [
+              "donker"
+            ]
+          }
+        ]
+      },
       "Lines": [
         {
           "Delimiter": "\"",
           "StringParts": [
             "lonker"
+          ]
+        }
+      ]
+    },
+    {
+      "Condition": {
+        "Ref": "broke"
+      },
+      "ElseIfs": [],
+      "ElseLines": {
+        "Lines": null
+      },
+      "Lines": [
+        {
+          "Condition": {
+            "Head": {
+              "Ref": "a"
+            },
+            "Rest": [
+              {
+                "Operator": "<",
+                "Value": {
+                  "Ref": "b"
+                }
+              }
+            ]
+          },
+          "ElseIfs": [],
+          "ElseLines": {
+            "Lines": [
+              {
+                "Ops": [
+                  {
+                    "Arguments": [
+                      {
+                        "Delimiter": "\"",
+                        "StringParts": [
+                          "second"
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "Target": {
+                  "Ref": "print"
+                }
+              }
+            ]
+          },
+          "Lines": [
+            {
+              "Ops": [
+                {
+                  "Arguments": [
+                    {
+                      "Delimiter": "\"",
+                      "StringParts": [
+                        "first"
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "Target": {
+                "Ref": "print"
+              }
+            }
           ]
         }
       ]

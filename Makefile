@@ -8,7 +8,7 @@ test-write: parser.go $(patsubst tests/%.moon,tests/%.json,$(wildcard tests/*.mo
 	@echo "pass"
 
 moonscript-go: *.go
-	go build -o moonscript-go .
+	@go build -o moonscript-go .
 
 parser.go: moonscript.peg
 	@pigeon -o parser.go moonscript.peg

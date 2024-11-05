@@ -37,6 +37,62 @@
       "IsMethod": false,
       "Lines": [
         {
+          "Condition": {
+            "Head": {
+              "Ref": "a"
+            },
+            "Rest": [
+              {
+                "Operator": "<",
+                "Value": {
+                  "Ref": "b"
+                }
+              }
+            ]
+          },
+          "ElseIfs": [],
+          "ElseLines": {
+            "Lines": [
+              {
+                "Ops": [
+                  {
+                    "Arguments": [
+                      {
+                        "Delimiter": "\"",
+                        "StringParts": [
+                          "It's not right!"
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "Target": {
+                  "Ref": "print"
+                }
+              }
+            ]
+          },
+          "Lines": [
+            {
+              "Expressions": [
+                {
+                  "Head": {
+                    "Ref": "a"
+                  },
+                  "Rest": [
+                    {
+                      "Operator": "-",
+                      "Value": {
+                        "Ref": "b"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
           "Expressions": [
             {
               "Head": {

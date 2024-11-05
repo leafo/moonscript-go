@@ -314,20 +314,12 @@ func (n IfStatementNode) ToLua(state *LuaRenderState) (string, error) {
 
 	state.Indent += 1
 
-	for _, line := range n.Lines {
-		lineNode, ok := line.(Node)
-		if !ok {
-			return "", fmt.Errorf("IfStatementNode: unknown line type: %T", line)
-		}
-
-		lineStr, err := lineNode.ToLua(state)
-		if err != nil {
-			return "", err
-		}
-
-		buf.WriteString(state.WithIndent(lineStr))
-		buf.WriteString("\n")
+	linesStr, err := n.Lines.ToLua(state)
+	if err != nil {
+		return "", err
 	}
+
+	buf.WriteString(linesStr)
 
 	state.Indent -= 1
 
@@ -343,43 +335,27 @@ func (n IfStatementNode) ToLua(state *LuaRenderState) (string, error) {
 
 		state.Indent += 1
 
-		for _, line := range elseif.Lines {
-			lineNode, ok := line.(Node)
-			if !ok {
-				return "", fmt.Errorf("ElseIfStatementNode: unknown line type: %T", line)
-			}
-
-			lineStr, err := lineNode.ToLua(state)
-			if err != nil {
-				return "", err
-			}
-
-			buf.WriteString(state.WithIndent(lineStr))
-			buf.WriteString("\n")
+		linesStr, err := elseif.Lines.ToLua(state)
+		if err != nil {
+			return "", err
 		}
+
+		buf.WriteString(linesStr)
 
 		state.Indent -= 1
 	}
 
-	if len(n.ElseLines) > 0 {
+	if !n.ElseLines.IsEmpty() {
 		buf.WriteString(state.WithIndent("else\n"))
 
 		state.Indent += 1
 
-		for _, line := range n.ElseLines {
-			lineNode, ok := line.(Node)
-			if !ok {
-				return "", fmt.Errorf("IfStatementNode: unknown else line type: %T", line)
-			}
-
-			lineStr, err := lineNode.ToLua(state)
-			if err != nil {
-				return "", err
-			}
-
-			buf.WriteString(state.WithIndent(lineStr))
-			buf.WriteString("\n")
+		linesStr, err := n.ElseLines.ToLua(state)
+		if err != nil {
+			return "", err
 		}
+
+		buf.WriteString(linesStr)
 
 		state.Indent -= 1
 	}
@@ -408,20 +384,12 @@ func (n FunctionExpressionNode) ToLua(state *LuaRenderState) (string, error) {
 
 	state.Indent += 1
 
-	for _, line := range n.Lines {
-		lineNode, ok := line.(Node)
-		if !ok {
-			return "", fmt.Errorf("FunctionExpressionNode: unknown line type: %T", line)
-		}
-
-		lineStr, err := lineNode.ToLua(state)
-		if err != nil {
-			return "", err
-		}
-
-		buf.WriteString(state.WithIndent(lineStr))
-		buf.WriteString("\n")
+	linesStr, err := n.Lines.ToLua(state)
+	if err != nil {
+		return "", err
 	}
+
+	buf.WriteString(linesStr)
 
 	state.Indent -= 1
 
