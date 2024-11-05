@@ -1,8 +1,7 @@
 
 
 
-
-() ->
+hello = () ->
   print "hello world"
 
 (a, b) ->
@@ -12,3 +11,7 @@
     print "It's not right!"
 
   return a + b
+
+
+f = -> print "cool"
+g, b = ->, ->

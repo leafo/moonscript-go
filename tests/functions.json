@@ -1,26 +1,33 @@
 {
   "Lines": [
     {
-      "Arguments": null,
-      "IsMethod": false,
-      "Lines": [
+      "Exprs": [
         {
-          "Ops": [
+          "Arguments": null,
+          "IsMethod": false,
+          "Lines": [
             {
-              "Arguments": [
+              "Ops": [
                 {
-                  "Delimiter": "\"",
-                  "StringParts": [
-                    "hello world"
+                  "Arguments": [
+                    {
+                      "Delimiter": "\"",
+                      "StringParts": [
+                        "hello world"
+                      ]
+                    }
                   ]
                 }
-              ]
+              ],
+              "Target": {
+                "Ref": "print"
+              }
             }
-          ],
-          "Target": {
-            "Ref": "print"
-          }
+          ]
         }
+      ],
+      "Names": [
+        "hello"
       ]
     },
     {
@@ -109,6 +116,54 @@
             }
           ]
         }
+      ]
+    },
+    {
+      "Exprs": [
+        {
+          "Arguments": null,
+          "IsMethod": false,
+          "Lines": [
+            {
+              "Ops": [
+                {
+                  "Arguments": [
+                    {
+                      "Delimiter": "\"",
+                      "StringParts": [
+                        "cool"
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "Target": {
+                "Ref": "print"
+              }
+            }
+          ]
+        }
+      ],
+      "Names": [
+        "f"
+      ]
+    },
+    {
+      "Exprs": [
+        {
+          "Arguments": null,
+          "IsMethod": false,
+          "Lines": null
+        },
+        {
+          "Arguments": null,
+          "IsMethod": false,
+          "Lines": null
+        }
+      ],
+      "Names": [
+        "g",
+        "b"
       ]
     }
   ]

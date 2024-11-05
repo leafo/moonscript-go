@@ -36,7 +36,6 @@ LinesTail <- Space Break EmptyLine* line:IndentedLine {
   return line, nil
 }
 
-// NOTE: line is indent checked
 Line <- CommentLine / AssignmentLine / ReturnLine / IfStatement / ExpressionLine
 
 IndentedLine <- MatchIndent line:Line {
@@ -339,13 +338,22 @@ ElseLine <- White "else" Space line:Line {
   return Lines{[]any{line}}, nil
 }
 
-FunctionExpression <- args:FunctionArguments? Space "->" SpaceBreak lines:Lines {
+FunctionExpression <- args:FunctionArguments? Space "->" lines:(FunctionBlock / FunctionLine)? {
   return FunctionExpressionNode{
     false,
     toSlice[ArgumentTuple](args),
-    lines.(Lines),
+    toValue[Lines](lines),
   }, nil
 }
+
+FunctionBlock <- SpaceBreak lines:Lines {
+  return lines, nil
+}
+
+FunctionLine <- Space line:Line {
+  return Lines{[]any{line}}, nil
+}
+
 
 FunctionArguments <- "(" Space names:NameList? Space ")" {
   strNames := toSlice[string](names)
