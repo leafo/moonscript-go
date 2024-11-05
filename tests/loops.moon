@@ -12,3 +12,6 @@ for i = 1, 10
 
 for i = 10, 12, 1
   print i
+
+for idx, v in ipairs {1,2,3}
+  print idx, v

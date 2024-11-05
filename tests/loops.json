@@ -128,6 +128,69 @@
         "Text": "1",
         "Type": "Integer"
       }
+    },
+    {
+      "Expressions": [
+        {
+          "Ops": [
+            {
+              "Expressions": [
+                {
+                  "Tuples": [
+                    {
+                      "Key": null,
+                      "Value": {
+                        "Text": "1",
+                        "Type": "Integer"
+                      }
+                    },
+                    {
+                      "Key": null,
+                      "Value": {
+                        "Text": "2",
+                        "Type": "Integer"
+                      }
+                    },
+                    {
+                      "Key": null,
+                      "Value": {
+                        "Text": "3",
+                        "Type": "Integer"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "Target": {
+            "Ref": "ipairs"
+          }
+        }
+      ],
+      "Lines": [
+        {
+          "Ops": [
+            {
+              "Expressions": [
+                {
+                  "Ref": "idx"
+                },
+                {
+                  "Ref": "v"
+                }
+              ]
+            }
+          ],
+          "Target": {
+            "Ref": "print"
+          }
+        }
+      ],
+      "Names": [
+        "idx",
+        "v"
+      ]
     }
   ]
 }

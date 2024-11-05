@@ -13,3 +13,6 @@ end
 for i = 10, 12, 1 do
   print(i)
 end
+for idx, v in ipairs({1, 2, 3}) do
+  print(idx, v)
+end

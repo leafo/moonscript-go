@@ -531,3 +531,41 @@ func (n ForLoopNode) ToLua(state *LuaRenderState) (string, error) {
 	buf.WriteString(state.WithIndent("end"))
 	return buf.String(), nil
 }
+
+func (n ForEachLoopNode) ToLua(state *LuaRenderState) (string, error) {
+	var buf strings.Builder
+
+	buf.WriteString(state.WithIndent("for "))
+	for i, name := range n.Names {
+		if i > 0 {
+			buf.WriteString(", ")
+		}
+		nameStr, ok := name.(string)
+		if !ok {
+			return "", fmt.Errorf("ForEachLoopNode: name is not a string: %T", name)
+		}
+		buf.WriteString(nameStr)
+	}
+	buf.WriteString(" in ")
+
+	exprStr, err := n.ExpressionList.ToLua(state)
+	if err != nil {
+		return "", err
+	}
+	buf.WriteString(exprStr)
+	buf.WriteString(" do\n")
+
+	state.Indent += 1
+
+	linesStr, err := n.Lines.ToLua(state)
+	if err != nil {
+		return "", err
+	}
+
+	buf.WriteString(linesStr)
+
+	state.Indent -= 1
+
+	buf.WriteString(state.WithIndent("end"))
+	return buf.String(), nil
+}

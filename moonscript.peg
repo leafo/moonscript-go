@@ -37,7 +37,7 @@ LinesTail <- Space Break EmptyLine* line:IndentedLine {
 }
 
 Line <- CommentLine / AssignmentLine / ReturnStatement / FlowControl/ ControlStatement / ExpressionLine
-ControlStatement <- IfStatement / WhileStatement / ForLoop
+ControlStatement <- IfStatement / WhileStatement / ForLoop / ForEachLoop
 
 IndentedLine <- MatchIndent line:Line {
   return line, nil
@@ -400,5 +400,15 @@ ForLoop <- "for" Space variable:Name Space "=" Space start:Expression Space "," 
 ForLoopStep <- Space "," Space step:Expression {
   return step, nil
 }
+
+
+ForEachLoop <- "for" Space names:NameList Space "in" Space exprs:ExpressionList SpaceBreak lines:Lines {
+  return ForEachLoopNode{
+    names.([]any),
+    exprs.(ExpressionList),
+    lines.(Lines),
+  }, nil
+}
+
 
 
