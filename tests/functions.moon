@@ -15,3 +15,6 @@ hello = () ->
 
 f = -> print "cool"
 g, b = ->, ->
+
+
+-> if true then return

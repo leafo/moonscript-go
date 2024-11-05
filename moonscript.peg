@@ -300,8 +300,16 @@ PopIndent <- #{
   return nil
 }
 
-ReturnLine <- "return" Space exprs:ExpressionList {
+ReturnLine <- "return" exprs:ReturnExpressionList? {
+  if exprs == nil {
+    return ReturnNode{nil}, nil
+  }
+
   return ReturnNode{exprs.([]any)}, nil
+}
+
+ReturnExpressionList <- Space exprs:ExpressionList {
+  return exprs, nil
 }
 
 IfStatement <- "if" Space

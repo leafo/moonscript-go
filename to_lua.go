@@ -400,10 +400,12 @@ func (n FunctionExpressionNode) ToLua(state *LuaRenderState) (string, error) {
 func (n ReturnNode) ToLua(state *LuaRenderState) (string, error) {
 	var buf strings.Builder
 
-	buf.WriteString("return ")
+	buf.WriteString("return")
 
 	for i, expr := range n.Expressions {
-		if i > 0 {
+		if i == 0 {
+			buf.WriteString(" ")
+		} else if i > 0 {
 			buf.WriteString(", ")
 		}
 		exprNode, ok := expr.(Node)

@@ -165,6 +165,26 @@
         "g",
         "b"
       ]
+    },
+    {
+      "Arguments": null,
+      "IsMethod": false,
+      "Lines": [
+        {
+          "Condition": {
+            "Primitive": "true"
+          },
+          "ElseIfs": [],
+          "ElseLines": {
+            "Lines": null
+          },
+          "Lines": [
+            {
+              "Expressions": null
+            }
+          ]
+        }
+      ]
     }
   ]
 }
