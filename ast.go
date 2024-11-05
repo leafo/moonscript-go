@@ -183,3 +183,17 @@ type WhileStatementNode struct {
 	Condition any
 	Lines
 }
+
+type ForLoopNode struct {
+	IndexName any
+	Start     any
+	End       any
+	Step      any
+	Lines
+}
+
+type ForEachLoopNode struct {
+	Names      []any
+	Expression any
+	Lines
+}

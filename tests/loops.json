@@ -69,6 +69,65 @@
           "Type": "Break"
         }
       ]
+    },
+    {
+      "End": {
+        "Text": "10",
+        "Type": "Integer"
+      },
+      "IndexName": "i",
+      "Lines": [
+        {
+          "Ops": [
+            {
+              "Arguments": [
+                {
+                  "Ref": "i"
+                }
+              ]
+            }
+          ],
+          "Target": {
+            "Ref": "print"
+          }
+        }
+      ],
+      "Start": {
+        "Text": "1",
+        "Type": "Integer"
+      },
+      "Step": null
+    },
+    {
+      "End": {
+        "Text": "12",
+        "Type": "Integer"
+      },
+      "IndexName": "i",
+      "Lines": [
+        {
+          "Ops": [
+            {
+              "Arguments": [
+                {
+                  "Ref": "i"
+                }
+              ]
+            }
+          ],
+          "Target": {
+            "Ref": "print"
+          }
+        }
+      ],
+      "Start": {
+        "Text": "10",
+        "Type": "Integer"
+      },
+      "Step": {
+        "Text": "1",
+        "Type": "Integer"
+      }
     }
   ]
 }

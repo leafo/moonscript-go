@@ -469,3 +469,53 @@ func (n WhileStatementNode) ToLua(state *LuaRenderState) (string, error) {
 	buf.WriteString(state.WithIndent("end"))
 	return buf.String(), nil
 }
+
+func (n ForLoopNode) ToLua(state *LuaRenderState) (string, error) {
+	var buf strings.Builder
+
+	buf.WriteString(state.WithIndent("for "))
+	indexName, ok := n.IndexName.(string)
+	if !ok {
+		return "", fmt.Errorf("ForLoopNode: index name is not a string: %T", n.IndexName)
+	}
+	buf.WriteString(indexName)
+	buf.WriteString(" = ")
+
+	startStr, err := n.Start.(Node).ToLua(state)
+	if err != nil {
+		return "", err
+	}
+	buf.WriteString(startStr)
+	buf.WriteString(", ")
+
+	endStr, err := n.End.(Node).ToLua(state)
+	if err != nil {
+		return "", err
+	}
+	buf.WriteString(endStr)
+
+	if n.Step != nil {
+		buf.WriteString(", ")
+		stepStr, err := n.Step.(Node).ToLua(state)
+		if err != nil {
+			return "", err
+		}
+		buf.WriteString(stepStr)
+	}
+
+	buf.WriteString(" do\n")
+
+	state.Indent += 1
+
+	linesStr, err := n.Lines.ToLua(state)
+	if err != nil {
+		return "", err
+	}
+
+	buf.WriteString(linesStr)
+
+	state.Indent -= 1
+
+	buf.WriteString(state.WithIndent("end"))
+	return buf.String(), nil
+}
