@@ -1,7 +1,7 @@
 {
   "Lines": [
     {
-      "Exprs": [
+      "Expressions": [
         {
           "Arguments": null,
           "IsMethod": false,
@@ -9,7 +9,7 @@
             {
               "Ops": [
                 {
-                  "Arguments": [
+                  "Expressions": [
                     {
                       "Delimiter": "\"",
                       "StringParts": [
@@ -63,7 +63,7 @@
               {
                 "Ops": [
                   {
-                    "Arguments": [
+                    "Expressions": [
                       {
                         "Delimiter": "\"",
                         "StringParts": [
@@ -119,7 +119,7 @@
       ]
     },
     {
-      "Exprs": [
+      "Expressions": [
         {
           "Arguments": null,
           "IsMethod": false,
@@ -127,7 +127,7 @@
             {
               "Ops": [
                 {
-                  "Arguments": [
+                  "Expressions": [
                     {
                       "Delimiter": "\"",
                       "StringParts": [
@@ -149,7 +149,7 @@
       ]
     },
     {
-      "Exprs": [
+      "Expressions": [
         {
           "Arguments": null,
           "IsMethod": false,
@@ -187,7 +187,7 @@
       ]
     },
     {
-      "Exprs": [
+      "Expressions": [
         {
           "Tuples": [
             {
@@ -199,7 +199,7 @@
                   {
                     "Ops": [
                       {
-                        "Arguments": [
+                        "Expressions": [
                           {
                             "Ref": "self"
                           }
@@ -220,7 +220,7 @@
                 "IsMethod": false,
                 "Lines": [
                   {
-                    "Exprs": [
+                    "Expressions": [
                       {
                         "Primitive": "true"
                       }
@@ -260,7 +260,7 @@
                   {
                     "Ops": [
                       {
-                        "Arguments": [
+                        "Expressions": [
                           {
                             "Delimiter": "\"",
                             "StringParts": [

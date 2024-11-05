@@ -1,7 +1,7 @@
 {
   "Lines": [
     {
-      "Exprs": [
+      "Expressions": [
         {
           "Ref": "two"
         }
@@ -11,7 +11,7 @@
       ]
     },
     {
-      "Exprs": [
+      "Expressions": [
         {
           "Delimiter": "\"",
           "StringParts": [

@@ -1,7 +1,7 @@
 {
   "Lines": [
     {
-      "Exprs": [
+      "Expressions": [
         {
           "Head": {
             "Text": "5",
@@ -39,7 +39,7 @@
       ]
     },
     {
-      "Exprs": [
+      "Expressions": [
         {
           "Delimiter": "\"",
           "StringParts": [
@@ -67,7 +67,7 @@
       ]
     },
     {
-      "Exprs": [
+      "Expressions": [
         {
           "Head": {
             "Expression": {
@@ -107,7 +107,7 @@
       ]
     },
     {
-      "Exprs": [
+      "Expressions": [
         {
           "Expression": {
             "Head": {

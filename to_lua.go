@@ -47,6 +47,32 @@ func (n PrimitiveNode) ToLua(state *LuaRenderState) (string, error) {
 	return n.Primitive, nil
 }
 
+func (n ExpressionList) ToLua(state *LuaRenderState) (string, error) {
+	var buf strings.Builder
+
+	if n.IsEmpty() {
+		return "", fmt.Errorf("ExpressionList: is empty, can't convert to lua")
+	}
+
+	for i, expr := range n.Expressions {
+		if i > 0 {
+			buf.WriteString(", ")
+		}
+
+		exprNode, success := expr.(Node)
+		if !success {
+			return "", fmt.Errorf("ExpressionList: unknown expression type: %T", expr)
+		}
+		marshaled, err := exprNode.ToLua(state)
+		if err != nil {
+			return "", err
+		}
+		buf.WriteString(marshaled)
+	}
+
+	return buf.String(), nil
+}
+
 func (n AssignmentNode) ToLua(state *LuaRenderState) (string, error) {
 	var buf strings.Builder
 
@@ -75,21 +101,11 @@ func (n AssignmentNode) ToLua(state *LuaRenderState) (string, error) {
 
 	buf.WriteString(" = ")
 
-	for i, expr := range n.Exprs {
-		if i > 0 {
-			buf.WriteString(", ")
-		}
-
-		exprNode, success := expr.(Node)
-		if !success {
-			return "", fmt.Errorf("AssignmentNode: unknown value type: %T", expr)
-		}
-		marshaled, err := exprNode.ToLua(state)
-		if err != nil {
-			return "", err
-		}
-		buf.WriteString(marshaled)
+	marshaled, err := n.ExpressionList.ToLua(state)
+	if err != nil {
+		return "", err
 	}
+	buf.WriteString(marshaled)
 
 	return buf.String(), nil
 }
@@ -203,21 +219,17 @@ func (n ChainNode) ToLua(state *LuaRenderState) (string, error) {
 }
 
 func (n ChainCallNode) ToLua(state *LuaRenderState) (string, error) {
-	var args []string
-	for _, arg := range n.Arguments {
-		argNode, ok := arg.(Node)
-		if !ok {
-			return "", fmt.Errorf("ChainCallNode: unknown argument type: %T", arg)
-		}
+	args := ""
 
-		argStr, err := argNode.ToLua(state)
+	if !n.IsEmpty() {
+		var err error
+		args, err = n.ExpressionList.ToLua(state)
 		if err != nil {
 			return "", err
 		}
-		args = append(args, argStr)
 	}
 
-	return fmt.Sprintf("(%s)", strings.Join(args, ", ")), nil
+	return fmt.Sprintf("(%s)", args), nil
 }
 
 func (n ChainDotNode) ToLua(state *LuaRenderState) (string, error) {

@@ -16,6 +16,14 @@ func (l *Lines) IsEmpty() bool {
 	return len(l.Lines) == 0
 }
 
+type ExpressionList struct {
+	Expressions []any
+}
+
+func (e *ExpressionList) IsEmpty() bool {
+	return len(e.Expressions) == 0
+}
+
 type TableNode struct {
 	Tuples []TableTuple
 }
@@ -35,7 +43,7 @@ type PrimitiveNode struct {
 
 type AssignmentNode struct {
 	Names []any
-	Exprs []any
+	ExpressionList
 }
 
 type ExpressionNode struct {
@@ -109,7 +117,7 @@ type ChainNode struct {
 
 // calls a function with arguments
 type ChainCallNode struct {
-	Arguments []any
+	ExpressionList
 }
 
 // indexes field by name using dot notation
@@ -150,7 +158,7 @@ type ArgumentTuple struct {
 }
 
 type ReturnNode struct {
-	Expressions []any
+	ExpressionList
 }
 
 type FlowControlType int
@@ -193,7 +201,7 @@ type ForLoopNode struct {
 }
 
 type ForEachLoopNode struct {
-	Names      []any
-	Expression any
+	Names []any
+	ExpressionList
 	Lines
 }

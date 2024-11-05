@@ -12,7 +12,7 @@
         {
           "Ops": [
             {
-              "Arguments": [
+              "Expressions": [
                 {
                   "Delimiter": "\"",
                   "StringParts": [
@@ -31,7 +31,7 @@
     {
       "Ops": [
         {
-          "Arguments": [
+          "Expressions": [
             {
               "Delimiter": "\"",
               "StringParts": [
@@ -58,7 +58,7 @@
       },
       "Lines": [
         {
-          "Exprs": [
+          "Expressions": [
             {
               "Text": "2",
               "Type": "Integer"
@@ -73,7 +73,7 @@
           ]
         },
         {
-          "Exprs": [
+          "Expressions": [
             {
               "Tuples": [
                 {
@@ -109,7 +109,7 @@
         {
           "Ops": [
             {
-              "Arguments": [
+              "Expressions": [
                 {
                   "Tuples": [
                     {
@@ -283,7 +283,7 @@
               {
                 "Ops": [
                   {
-                    "Arguments": [
+                    "Expressions": [
                       {
                         "Delimiter": "\"",
                         "StringParts": [
@@ -303,7 +303,7 @@
             {
               "Ops": [
                 {
-                  "Arguments": [
+                  "Expressions": [
                     {
                       "Delimiter": "\"",
                       "StringParts": [

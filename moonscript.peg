@@ -86,7 +86,7 @@ ExpressionList <- head:Expression tail:ExpressionListTail* {
     exprs = append(exprs, t)
   }
 
-  return exprs, nil
+  return ExpressionList{exprs}, nil
 }
 
 ExpressionListTail <- Space "," White expr:Expression {
@@ -100,7 +100,7 @@ Operator <- ([-+*/^%<>] / WordOperator) {
 WordOperator <- ("and" / "or") !AlphaNum / ".."
 
 AssignmentLine <- names:NameList White "=" White exprs:ExpressionList {
-  return AssignmentNode{names.([]any), exprs.([]any)}, nil
+  return AssignmentNode{names.([]any), exprs.(ExpressionList)}, nil
 }
 
 Comment <- "--" body:CommentBody {
@@ -250,15 +250,15 @@ ChainOperation <- ChainBang / ChainCall / ChainDot / ChainMethod / ChainCallPare
 
 // whitespace function call
 ChainCall <- SomeSpace args:ExpressionList {
-  return ChainCallNode{args.([]any)}, nil
+  return ChainCallNode{args.(ExpressionList)}, nil
 }
 
 ChainBang <- "!" {
-  return ChainCallNode{nil}, nil
+  return ChainCallNode{}, nil
 }
 
 ChainCallParens <- "(" White args:ExpressionList White ")" {
-  return ChainCallNode{args.([]any)}, nil
+  return ChainCallNode{args.(ExpressionList)}, nil
 }
 
 ChainDot <- "." White name:Name {
@@ -303,11 +303,7 @@ PopIndent <- #{
 }
 
 ReturnStatement <- "return" exprs:ReturnExpressionList? {
-  if exprs == nil {
-    return ReturnNode{nil}, nil
-  }
-
-  return ReturnNode{exprs.([]any)}, nil
+  return ReturnNode{toValue[ExpressionList](exprs)}, nil
 }
 
 ReturnExpressionList <- Space exprs:ExpressionList {

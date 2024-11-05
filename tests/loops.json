@@ -1,7 +1,7 @@
 {
   "Lines": [
     {
-      "Exprs": [
+      "Expressions": [
         {
           "Text": "0",
           "Type": "Integer"
@@ -17,7 +17,7 @@
       },
       "Lines": [
         {
-          "Exprs": [
+          "Expressions": [
             {
               "Head": {
                 "Ref": "k"
@@ -80,7 +80,7 @@
         {
           "Ops": [
             {
-              "Arguments": [
+              "Expressions": [
                 {
                   "Ref": "i"
                 }
@@ -108,7 +108,7 @@
         {
           "Ops": [
             {
-              "Arguments": [
+              "Expressions": [
                 {
                   "Ref": "i"
                 }
