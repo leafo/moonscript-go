@@ -3,7 +3,7 @@ package main
 }
 
 Input <- lines:Lines? White EOF {
-  return lines, nil
+  return toValue[Lines](lines), nil
 }
 
 EOF <- !.

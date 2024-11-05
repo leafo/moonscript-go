@@ -1,10 +1,13 @@
-.PHONY: test-%
+.PHONY: test test-% write-tests
 
-# tests/assign.moon - test-assign
-test: parser.go $(patsubst tests/%.moon,test-%,$(wildcard tests/*.moon))
+ALL_TESTS = $(patsubst tests/%.moon,test-%,$(wildcard tests/*.moon)) tests/empty.lua tests/empty_comments.lua tests/assign.lua tests/functions.lua tests/tables.lua tests/functions.lua tests/chain.lua tests/statements.lua tests/simple.lua tests/loops.lua
+
+# run all tests
+test: parser.go $(ALL_TESTS)
 	@echo "pass"
 
-test-write: parser.go $(patsubst tests/%.moon,tests/%.json,$(wildcard tests/*.moon))
+# write the output of all tests to tests dir, so they can be diff'd
+write-tests: parser.go $(ALL_TESTS)
 	@echo "pass"
 
 moonscript-go: *.go
@@ -18,4 +21,7 @@ test-%: moonscript-go
 
 tests/%.json: moonscript-go tests/%.moon
 	./moonscript-go -json tests/$*.moon | jq -S > tests/$*.json
+
+tests/%.lua: moonscript-go tests/%.moon
+	./moonscript-go tests/$*.moon > tests/$*.lua
 
