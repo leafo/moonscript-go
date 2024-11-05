@@ -152,3 +152,29 @@ type ArgumentTuple struct {
 type ReturnNode struct {
 	Expressions []any
 }
+
+type FlowControlType int
+
+const (
+	Break FlowControlType = iota
+	Continue
+)
+
+func (fct FlowControlType) String() string {
+	switch fct {
+	case Break:
+		return "Break"
+	case Continue:
+		return "Continue"
+	default:
+		return "Unknown"
+	}
+}
+
+func (fct FlowControlType) MarshalJSON() ([]byte, error) {
+	return json.Marshal(fct.String())
+}
+
+type FlowControlNode struct {
+	Type FlowControlType
+}

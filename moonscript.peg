@@ -36,13 +36,15 @@ LinesTail <- Space Break EmptyLine* line:IndentedLine {
   return line, nil
 }
 
-Line <- CommentLine / AssignmentLine / ReturnLine / IfStatement / ExpressionLine
+Line <- CommentLine / AssignmentLine / ReturnStatement / FlowControl/ IfStatement / ExpressionLine
 
 IndentedLine <- MatchIndent line:Line {
   return line, nil
 }
 
-Keyword <- "if" / "then" / "elseif" / "else" / "return" / "function" / "and" / "or"
+Keyword <- "if" / "then" / "elseif" / "else" / "return" / "function" / "and" / "or" / "continue" / "break"
+
+FlowControl <- "continue" { return FlowControlNode{Continue}, nil } / "break" { return FlowControlNode{Break}, nil }
 
 EmptyLine <- Space Break {
   return nil, nil
@@ -199,7 +201,6 @@ Primitive <- ("true" / "false" / "nil") {
   return PrimitiveNode{string(c.text)}, nil
 }
 
-
 Table <- "{" White tuples:TableElementList? White "}" {
   if tuples == nil {
     return TableNode{nil}, nil
@@ -300,7 +301,7 @@ PopIndent <- #{
   return nil
 }
 
-ReturnLine <- "return" exprs:ReturnExpressionList? {
+ReturnStatement <- "return" exprs:ReturnExpressionList? {
   if exprs == nil {
     return ReturnNode{nil}, nil
   }
@@ -346,13 +347,16 @@ ElseLine <- White "else" Space line:Line {
   return Lines{[]any{line}}, nil
 }
 
-FunctionExpression <- args:FunctionArguments? Space "->" lines:(FunctionBlock / FunctionLine)? {
+FunctionExpression <- args:FunctionArguments? Space isMethod:FunctionType lines:(FunctionBlock / FunctionLine)? {
   return FunctionExpressionNode{
-    false,
+    isMethod.(bool),
     toSlice[ArgumentTuple](args),
     toValue[Lines](lines),
   }, nil
 }
+
+FunctionType <- "->" { return false, nil} / "=>" { return true, nil}
+
 
 FunctionBlock <- SpaceBreak lines:Lines {
   return lines, nil

@@ -185,6 +185,125 @@
           ]
         }
       ]
+    },
+    {
+      "Exprs": [
+        {
+          "Tuples": [
+            {
+              "Key": "my_method",
+              "Value": {
+                "Arguments": null,
+                "IsMethod": true,
+                "Lines": [
+                  {
+                    "Ops": [
+                      {
+                        "Arguments": [
+                          {
+                            "Ref": "self"
+                          }
+                        ]
+                      }
+                    ],
+                    "Target": {
+                      "Ref": "print"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "Key": null,
+              "Value": {
+                "Arguments": null,
+                "IsMethod": false,
+                "Lines": [
+                  {
+                    "Exprs": [
+                      {
+                        "Primitive": "true"
+                      }
+                    ],
+                    "Names": [
+                      "a"
+                    ]
+                  },
+                  {
+                    "Expressions": [
+                      {
+                        "Delimiter": "\"",
+                        "StringParts": [
+                          "hello"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "Key": null,
+              "Value": {
+                "Arguments": [
+                  {
+                    "DefaultValue": null,
+                    "Name": "foo"
+                  },
+                  {
+                    "DefaultValue": null,
+                    "Name": "bar"
+                  }
+                ],
+                "IsMethod": true,
+                "Lines": [
+                  {
+                    "Ops": [
+                      {
+                        "Arguments": [
+                          {
+                            "Delimiter": "\"",
+                            "StringParts": [
+                              "world"
+                            ]
+                          },
+                          {
+                            "Ref": "foo"
+                          },
+                          {
+                            "Ref": "bar"
+                          }
+                        ]
+                      }
+                    ],
+                    "Target": {
+                      "Ref": "print"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "Key": null,
+              "Value": {
+                "Arguments": null,
+                "IsMethod": false,
+                "Lines": [
+                  {
+                    "Delimiter": "\"",
+                    "StringParts": [
+                      "world"
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "Names": [
+        "t"
+      ]
     }
   ]
 }

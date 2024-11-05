@@ -368,9 +368,15 @@ func (n FunctionExpressionNode) ToLua(state *LuaRenderState) (string, error) {
 	var buf strings.Builder
 
 	buf.WriteString("function(")
+	k := 0
 
-	for i, arg := range n.Arguments {
-		if i > 0 {
+	if n.IsMethod {
+		buf.WriteString("self")
+		k++
+	}
+
+	for _, arg := range n.Arguments {
+		if k > 0 {
 			buf.WriteString(", ")
 		}
 		argName, ok := arg.Name.(string)
@@ -378,6 +384,7 @@ func (n FunctionExpressionNode) ToLua(state *LuaRenderState) (string, error) {
 			return "", fmt.Errorf("FunctionExpressionNode: argument name is not a string: %T", arg.Name)
 		}
 		buf.WriteString(argName)
+		k++
 	}
 
 	buf.WriteString(")\n")

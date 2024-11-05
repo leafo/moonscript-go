@@ -18,3 +18,13 @@ g, b = ->, ->
 
 
 -> if true then return
+
+t = {
+  my_method: => print @
+  ->
+    a = true
+    return "hello"
+  (foo, bar) =>
+    print "world", foo, bar
+  -> "world"
+}
