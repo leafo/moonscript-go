@@ -178,3 +178,8 @@ func (fct FlowControlType) MarshalJSON() ([]byte, error) {
 type FlowControlNode struct {
 	Type FlowControlType
 }
+
+type WhileStatementNode struct {
+	Condition any
+	Lines
+}

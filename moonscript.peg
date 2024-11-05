@@ -36,7 +36,8 @@ LinesTail <- Space Break EmptyLine* line:IndentedLine {
   return line, nil
 }
 
-Line <- CommentLine / AssignmentLine / ReturnStatement / FlowControl/ IfStatement / ExpressionLine
+Line <- CommentLine / AssignmentLine / ReturnStatement / FlowControl/ ControlStatement / ExpressionLine
+ControlStatement <- IfStatement / WhileStatement
 
 IndentedLine <- MatchIndent line:Line {
   return line, nil
@@ -382,5 +383,15 @@ FunctionArguments <- "(" Space names:NameList? Space ")" {
 
   return tuples, nil
 }
+
+WhileStatement <- "while" Space condition:Expression SpaceBreak lines:Lines {
+  return WhileStatementNode{
+    condition,
+    lines.(Lines),
+  }, nil
+}
+
+
+
 
 

@@ -1,0 +1,74 @@
+{
+  "Lines": [
+    {
+      "Exprs": [
+        {
+          "Text": "0",
+          "Type": "Integer"
+        }
+      ],
+      "Names": [
+        "k"
+      ]
+    },
+    {
+      "Condition": {
+        "Primitive": "true"
+      },
+      "Lines": [
+        {
+          "Exprs": [
+            {
+              "Head": {
+                "Ref": "k"
+              },
+              "Rest": [
+                {
+                  "Operator": "+",
+                  "Value": {
+                    "Text": "1",
+                    "Type": "Integer"
+                  }
+                }
+              ]
+            }
+          ],
+          "Names": [
+            "k"
+          ]
+        },
+        {
+          "Condition": {
+            "Head": {
+              "Ref": "k"
+            },
+            "Rest": [
+              {
+                "Operator": "<",
+                "Value": {
+                  "Text": "10",
+                  "Type": "Integer"
+                }
+              }
+            ]
+          },
+          "ElseIfs": [],
+          "ElseLines": {
+            "Lines": null
+          },
+          "Lines": [
+            {
+              "Type": "Continue"
+            }
+          ]
+        },
+        {
+          "Comment": " continue if k < 10 -- TODO: this"
+        },
+        {
+          "Type": "Break"
+        }
+      ]
+    }
+  ]
+}

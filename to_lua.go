@@ -428,3 +428,44 @@ func (n ReturnNode) ToLua(state *LuaRenderState) (string, error) {
 
 	return buf.String(), nil
 }
+
+func (n FlowControlNode) ToLua(state *LuaRenderState) (string, error) {
+	var buf strings.Builder
+
+	switch n.Type {
+	case Break:
+		buf.WriteString("break")
+	case Continue:
+		buf.WriteString("continue")
+	default:
+		return "", fmt.Errorf("FlowControlNode: unknown flow control type: %v", n.Type)
+	}
+
+	return buf.String(), nil
+}
+
+func (n WhileStatementNode) ToLua(state *LuaRenderState) (string, error) {
+	var buf strings.Builder
+
+	buf.WriteString(state.WithIndent("while "))
+	conditionStr, err := n.Condition.(Node).ToLua(state)
+	if err != nil {
+		return "", err
+	}
+	buf.WriteString(conditionStr)
+	buf.WriteString(" do\n")
+
+	state.Indent += 1
+
+	linesStr, err := n.Lines.ToLua(state)
+	if err != nil {
+		return "", err
+	}
+
+	buf.WriteString(linesStr)
+
+	state.Indent -= 1
+
+	buf.WriteString(state.WithIndent("end"))
+	return buf.String(), nil
+}
